@@ -17,7 +17,7 @@ const Hero = () => {
                 <ChevronRight className="ml-2 h-4 w-4" />
               </Button>
             </div>
-            <div className="md:w-1/2">
+            <div className="w-2/3 md:w-fit">
               <Image
                 src="https://placehold.co/600x400"
                 alt="Physics Concept Illustration"

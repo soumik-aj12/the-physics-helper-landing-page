@@ -67,7 +67,7 @@ export function InfiniteCarousel() {
         >
           {testimonials.map((testimonial, index) => (
             <div key={index} className="w-full flex-shrink-0">
-              <blockquote className="text-center">
+              <blockquote className="text-center m-10">
                 <p className="text-xl text-gray-600 mb-4">"{testimonial.content}"</p>
                 <footer className="text-gray-500">
                   - {testimonial.author}, {testimonial.title}

@@ -12,7 +12,7 @@ const Header = () => {
             <Atom className="h-8 w-8 text-blue-600" />
             <span className="text-2xl font-bold text-gray-800">The Physics Helper</span>
           </Link>
-          <div className="flex items-center md:space-x-6">
+          <div className="flex items-center justify-center md:space-x-6">
             <nav className="hidden md:flex space-x-6">
               <Link href="#about" className="text-gray-600 hover:text-blue-600">
                 About
