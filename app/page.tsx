@@ -3,7 +3,7 @@ import Contact from "@/components/Contact";
 import Features from "@/components/Features";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
-import Hero from "@/components/Hero";
+import Hero from "@/components/Hero/Hero";
 import Programs from "@/components/Programs";
 import Testimonial from "@/components/Testimonial/Testimonial";
 import Image from "next/image";
@@ -16,7 +16,7 @@ export default function Home() {
         <Hero />
         <Features/>
         <About/>
-        <Programs/>
+        {/* <Programs/> */}
         <Testimonial/>
         <Contact/>
       </main>

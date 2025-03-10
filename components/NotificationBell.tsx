@@ -20,7 +20,7 @@ const announcements: Announcement[] = [
   {
     id: 5,
     content: "Congratulations to Dr. Smith for winning the Nobel Prize in Physics!",
-    date: new Date(2025, 2, 3),
+    date: new Date(2025, 2, 8),
   },
 ]
 
@@ -31,8 +31,12 @@ export function NotificationBell() {
   useEffect(() => {
     const threeDaysAgo = new Date()
     threeDaysAgo.setDate(threeDaysAgo.getDate() - 3)
-    const newNotification = announcements.some((announcement) => announcement.date > threeDaysAgo)
-    setHasNewNotification(newNotification)
+    // console.log(threeDaysAgo);
+    
+    const newNotification = announcements.filter((announcement) => announcement.date > threeDaysAgo)
+    // console.log(newNotification);
+    
+    setHasNewNotification(newNotification.length > 0)
   }, [])
 
   return (
@@ -53,7 +57,7 @@ export function NotificationBell() {
       <PopoverContent className="w-80">
         <h3 className="font-semibold mb-2">Announcements</h3>
         <ScrollArea className="h-[300px]">
-          {announcements.map((announcement) => (
+          {announcements.sort((a:any,b:any)=>b.date - a.date).map((announcement) => (
             <div key={announcement.id} className="mb-4 last:mb-0">
               <p className="text-sm">{announcement.content}</p>
               <p className="text-xs text-gray-500 mt-1">{announcement.date.toLocaleDateString()}</p>

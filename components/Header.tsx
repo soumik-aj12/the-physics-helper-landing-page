@@ -6,7 +6,7 @@ import { NotificationBell } from './NotificationBell';
 
 const Header = () => {
   return (
-    <header className="bg-white shadow-sm">
+    <header className="sticky top-0 z-50 bg-white shadow-sm rounded-lg transition-shadow duration-300">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <Link href="/" className="flex items-center space-x-2">
             <Atom className="h-8 w-8 text-blue-600" />
