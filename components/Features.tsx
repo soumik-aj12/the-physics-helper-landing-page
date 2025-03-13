@@ -12,17 +12,17 @@ const Features = () => {
                 {
                   icon: Book,
                   title: "Expert-Led Courses",
-                  description: "Learn from renowned physicists and educators.",
+                  description: "From JEE Mains to NEET.",
                 },
                 {
                   icon: Users,
-                  title: "Collaborative Environment",
-                  description: "Engage with a community of passionate learners.",
+                  title: "Practical Classes",
+                  description: "All kinds of practical instruments are present.",
                 },
                 {
                   icon: Lightbulb,
-                  title: "Cutting-Edge Research",
-                  description: "Access state-of-the-art facilities and projects.",
+                  title: "Monthly & Weekly Exams",
+                  description: "Exams every 2 weeks and a brushup exam every month.",
                 },
               ].map((feature, index) => (
                 <Card key={index}>

@@ -15,11 +15,11 @@ const Hero = () => {
             <p className="w-5/6 text-end text-xl md:text-lg mb-6">– Arghya Sen.</p>
           </div>
           <Button size="lg" variant="secondary">
-            Explore Our Programs
+            <div className="text-base">Contact me</div>
             <ChevronRight className="ml-2 h-4 w-4" />
           </Button>
         </div>
-        <div className="md:w-1/2">
+        <div className="w-full md:w-1/2">
           <HeroCarousel />
         </div>
       </div>
