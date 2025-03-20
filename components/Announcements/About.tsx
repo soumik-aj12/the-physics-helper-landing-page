@@ -4,10 +4,10 @@ import { OrbitingCirclesDemo } from "./Orbit";
 
 const About = () => {
   return (
-    <section className="py-10 bg-gray-50">
+    <section id="quiz" className="md:py-20 px-3 bg-gray-50">
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row justify-center items-center gap-8">
-          <div className="w-full md:w-1/2 hidden md:flex justify-center">
+          <div className="w-full md:w-1/2 flex justify-center">
             <OrbitingCirclesDemo />
           </div>
           <div className="flex w-full min-w-72 grow flex-col items-stretch justify-center gap-1 py-4 @xl:px-4">

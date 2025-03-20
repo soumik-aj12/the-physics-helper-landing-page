@@ -2,7 +2,7 @@ import { OrbitingCircles } from "@/components/ui/orbiting-circles";
 
 export function OrbitingCirclesDemo() {
   return (
-    <div className="relative flex h-fit w-full flex-col items-center justify-center overflow">
+    <div className="relative flex h-[300px] md:h-fit w-full flex-col items-center justify-center">
       <OrbitingCircles iconSize={40} radius={120}>
         <Icons.mcsquare />
         <Icons.pulley />
