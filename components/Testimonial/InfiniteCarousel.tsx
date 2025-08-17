@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect, useRef } from "react"
+import React, { useState, useEffect, useRef, useCallback } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 
 interface Testimonial {
@@ -35,13 +35,14 @@ export function InfiniteCarousel() {
   const [isHovered, setIsHovered] = useState(false)
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
 
-  const nextTestimonial = () => {
+  // Wrap nextTestimonial in useCallback to prevent useEffect dependencies from changing
+  const nextTestimonial = useCallback(() => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % testimonials.length)
-  }
+  }, [])
 
-  const prevTestimonial = () => {
+  const prevTestimonial = useCallback(() => {
     setCurrentIndex((prevIndex) => (prevIndex - 1 + testimonials.length) % testimonials.length)
-  }
+  }, [])
 
   useEffect(() => {
     if (!isHovered) {
@@ -52,7 +53,7 @@ export function InfiniteCarousel() {
         clearInterval(intervalRef.current)
       }
     }
-  }, [isHovered, nextTestimonial]) // Added nextTestimonial to dependencies
+  }, [isHovered, nextTestimonial])
 
   return (
     <div
@@ -68,7 +69,7 @@ export function InfiniteCarousel() {
           {testimonials.map((testimonial, index) => (
             <div key={index} className="w-full flex-shrink-0">
               <blockquote className="text-center m-10">
-                <p className="text-xl text-gray-600 mb-4">"{testimonial.content}"</p>
+                <p className="text-xl text-gray-600 mb-4">&ldquo;{testimonial.content}&rdquo;</p>
                 <footer className="text-gray-500">
                   - {testimonial.author}, {testimonial.title}
                 </footer>

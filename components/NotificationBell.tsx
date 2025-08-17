@@ -20,7 +20,7 @@ const announcements: Announcement[] = [
   {
     id: 5,
     content: "Congratulations to Dr. Smith for winning the Nobel Prize in Physics!",
-    date: new Date(2025, 3, 8),
+    date: new Date(2025, 7, 8),
   },
 ]
 
@@ -57,7 +57,7 @@ export function NotificationBell() {
       <PopoverContent className="w-80">
         <h3 className="font-semibold mb-2">Announcements</h3>
         <ScrollArea className="h-[300px]">
-          {announcements.sort((a:any,b:any)=>b.date - a.date).map((announcement) => (
+          {announcements.sort((a, b) => b.date.getTime() - a.date.getTime()).map((announcement) => (
             <div key={announcement.id} className="mb-4 last:mb-0">
               <p className="text-sm">{announcement.content}</p>
               <p className="text-xs text-gray-500 mt-1">{announcement.date.toLocaleDateString()}</p>
