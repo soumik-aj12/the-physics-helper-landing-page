@@ -20,7 +20,7 @@ const announcements: Announcement[] = [
   {
     id: 5,
     content: "Congratulations to Dr. Smith for winning the Nobel Prize in Physics!",
-    date: new Date(2025, 2, 8),
+    date: new Date(2025, 3, 8),
   },
 ]
 

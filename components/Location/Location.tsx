@@ -1,6 +1,5 @@
 
 import React from 'react'
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import GMaps from './GMaps';
 
 const Location = () => {
