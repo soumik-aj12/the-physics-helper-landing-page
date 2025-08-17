@@ -15,7 +15,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { RadioGroup } from "@/components/ui/radio-group";
 
 interface Question {
   id: number;
