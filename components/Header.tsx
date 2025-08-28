@@ -15,7 +15,7 @@ const Header = () => {
         </Link>
         <div className="flex items-center justify-center md:space-x-6">
           <nav className="hidden md:flex space-x-6">
-            <Link href="#home" className="text-gray-600 hover:text-blue-600">
+            <Link href="/" className="text-gray-600 hover:text-blue-600">
               Home
             </Link>
             <Link href="#about" className="text-gray-600 hover:text-blue-600">
@@ -34,10 +34,10 @@ const Header = () => {
               Testimonial
             </Link>
             <Link
-              href="#locate"
+              href="/contact"
               className="text-gray-600 hover:text-blue-600"
             >
-              Locate
+              Contact
             </Link>
           </nav>
           <NotificationBell />
