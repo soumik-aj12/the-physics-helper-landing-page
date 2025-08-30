@@ -1,7 +1,7 @@
 "use client"
 import { GoogleMap, LoadScript, Marker, useLoadScript } from "@react-google-maps/api";
 import { Skeleton } from "./ui/skeleton";
-const GMaps = () => {
+const GMaps = ({ mapLat, mapLng }:{mapLat:number,mapLng:number}) => {
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
     libraries: ["places"],
@@ -12,8 +12,8 @@ const GMaps = () => {
   };
 
   const center = {
-    lat: 22.48842143590431,
-    lng: 88.31106434970289,
+    lat: mapLat,
+    lng: mapLng,
   };
   if (loadError) {
     return <div>Error loading maps</div>;

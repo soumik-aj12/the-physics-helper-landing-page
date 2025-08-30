@@ -1,3 +1,5 @@
+"use client"
+
 import About from "@/components/Announcements/About";
 import Features from "@/components/Features";
 import Footer from "@/components/Footer";
@@ -8,8 +10,11 @@ import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
 import { HeroCarousel } from "@/components/HeroCarousel";
 import Programs from "@/components/Programs";
+import Link from "next/link";
+import { useAuth } from "@/components/auth-context";
 
 export default function Home() {
+  const { user, isLoading } = useAuth();
   return (
     // <div className="flex flex-col min-h-screen">
     //   <Header />
@@ -34,38 +39,46 @@ export default function Home() {
                 – Arghya Sen.
               </p>
             </div>
-            <div className="flex flex-col lg:flex-row gap-3">
-              <Button
-                size="lg"
-                variant="secondary"
-                className="w-full md:w-auto"
-              >
-                <div className="text-base">Apply for admission</div>
-                <ChevronRight className="ml-2 h-4 w-4" />
-              </Button>
-              <Button
-                size="lg"
-                variant="secondary"
-                className="w-full md:w-auto"
-              >
-                <div className="text-base">Apply for exam</div>
-                <ChevronRight className="ml-2 h-4 w-4" />
-              </Button>
-              <Button
-                size="lg"
-                variant="secondary"
-                className="w-full md:w-auto"
-              >
-                <div className="text-base">Contact me</div>
-                <ChevronRight className="ml-2 h-4 w-4" />
-              </Button>
+            <div className="flex flex-col justify-center lg:flex-row gap-3">
+              <Link href="/admission">
+                <Button
+                  size="lg"
+                  variant="secondary"
+                  className="w-full md:w-auto"
+                >
+                  <div className="text-base">Apply for admission</div>
+                  <ChevronRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+              {user && (
+                <Link href="/exam-centre/apply">
+                <Button
+                  size="lg"
+                  variant="secondary"
+                  className="w-full md:w-auto"
+                >
+                  <div className="text-base">Apply for exam</div>
+                  <ChevronRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+              )}
+              <Link href="/contact">
+                <Button
+                  size="lg"
+                  variant="secondary"
+                  className="w-full md:w-auto"
+                >
+                  <div className="text-base">Contact me</div>
+                  <ChevronRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
             </div>
           </div>
           <div className="w-full md:w-1/2">
             <HeroCarousel />
           </div>
         </div>
-        <Features/>
+        <Features />
         <Testimonial />
       </section>
     </Wrapper>

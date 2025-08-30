@@ -1,28 +1,36 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useMemo, useState } from "react"
+import { useRouter } from "next/navigation"
+import { useAuth } from "@/components/auth-context"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { RazorpayPayment } from "@/components/RazorPayment"
-import { CheckCircle } from "lucide-react"
+import { CheckCircle, LogIn } from "lucide-react"
+import Link from "next/link"
 import Wrapper from "@/components/Wrapper/Wrapper"
 
-export default function page() {
+export default function ExamApplication() {
+    const { user, isLoading } = useAuth()
+    const router = useRouter()
+    //   const searchParams = useSearchParams()
+    const redirectSelf = useMemo(() => `/auth?redirect=${encodeURIComponent("/exam-centre/apply")}`, [])
+
     const [step, setStep] = useState(1)
     const [formData, setFormData] = useState({
-        name: "",
-        email: "",
+        name: user?.name || "",
+        email: user?.email || "",
         phone: "",
-        class: "",
+        class: user?.classLevel || "",
         exam: "",
         rollNumber: "",
     })
     const [paymentSuccess, setPaymentSuccess] = useState(false)
 
-    const examFees = {
+    const examFees: Record<string, number> = {
         "physics-midterm-11": 500,
         "physics-final-12": 750,
         "physics-olympiad": 1000,
@@ -32,17 +40,42 @@ export default function page() {
         setFormData((prev) => ({ ...prev, [field]: value }))
     }
 
-    const handleNext = () => {
-        setStep(step + 1)
-    }
-
+    const handleNext = () => setStep((s) => s + 1)
     const handlePaymentSuccess = (paymentId: string) => {
         setPaymentSuccess(true)
         setStep(3)
     }
-
     const handlePaymentError = (error: any) => {
         console.error("Payment failed:", error)
+    }
+
+    useEffect(() => {
+        // No auto-redirect; show friendly gate below
+    }, [])
+
+    if (!isLoading && !user) {
+        return (
+            <Wrapper>
+                <div className="container mx-auto px-4 max-w-md">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2">
+                                <LogIn className="h-5 w-5" /> Login required
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            <p className="text-gray-600">Please login or create an account to apply for exams.</p>
+                            <Link href={redirectSelf}>
+                                <Button className="w-full">Go to Login / Signup</Button>
+                            </Link>
+                            <Button variant="outline" className="w-full bg-transparent" onClick={() => router.push("/exam-centre")}>
+                                Back to Exam Centre
+                            </Button>
+                        </CardContent>
+                    </Card>
+                </div>
+            </Wrapper>
+        )
     }
 
     if (paymentSuccess) {
@@ -67,7 +100,7 @@ export default function page() {
                                     <strong>Class:</strong> {formData.class}
                                 </p>
                             </div>
-                            <Button onClick={() => (window.location.href = "/exam-centre")}>Back to Exam Centre</Button>
+                            <Button onClick={() => router.push("/exam-centre")}>Back to Exam Centre</Button>
                         </CardContent>
                     </Card>
                 </div>
@@ -77,7 +110,7 @@ export default function page() {
 
     return (
         <Wrapper>
-            <div className=" py-20 container mx-auto px-4 max-w-2xl">
+            <div className="container mx-auto px-4 py-20 max-w-2xl">
                 <h1 className="text-3xl font-bold text-center mb-8">Exam Application</h1>
 
                 {step === 1 && (
@@ -86,7 +119,13 @@ export default function page() {
                             <CardTitle>Student Information</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <form className="space-y-4">
+                            <form
+                                className="space-y-4"
+                                onSubmit={(e) => {
+                                    e.preventDefault()
+                                    handleNext()
+                                }}
+                            >
                                 <div>
                                     <Label htmlFor="name">Full Name</Label>
                                     <Input
@@ -117,7 +156,7 @@ export default function page() {
                                 </div>
                                 <div>
                                     <Label htmlFor="class">Class</Label>
-                                    <Select onValueChange={(value) => handleInputChange("class", value)}>
+                                    <Select value={formData.class} onValueChange={(value) => handleInputChange("class", value)}>
                                         <SelectTrigger>
                                             <SelectValue placeholder="Select your class" />
                                         </SelectTrigger>
@@ -129,7 +168,7 @@ export default function page() {
                                 </div>
                                 <div>
                                     <Label htmlFor="exam">Select Exam</Label>
-                                    <Select onValueChange={(value) => handleInputChange("exam", value)}>
+                                    <Select value={formData.exam} onValueChange={(value) => handleInputChange("exam", value)}>
                                         <SelectTrigger>
                                             <SelectValue placeholder="Select exam" />
                                         </SelectTrigger>
@@ -140,7 +179,16 @@ export default function page() {
                                         </SelectContent>
                                     </Select>
                                 </div>
-                                <Button onClick={handleNext} className="w-full">
+                                <div>
+                                    <Label htmlFor="rollNumber">Roll Number (if applicable)</Label>
+                                    <Input
+                                        id="rollNumber"
+                                        value={formData.rollNumber}
+                                        onChange={(e) => handleInputChange("rollNumber", e.target.value)}
+                                        placeholder="Enter your roll number"
+                                    />
+                                </div>
+                                <Button type="submit" className="w-full">
                                     Proceed to Payment
                                 </Button>
                             </form>
@@ -173,8 +221,8 @@ export default function page() {
                         </Card>
 
                         <RazorpayPayment
-                            amount={examFees[formData.exam as keyof typeof examFees] || 500}
-                            description={`Exam Fee - ${formData.exam}`}
+                            amount={(formData.exam && examFees[formData.exam]) || 500}
+                            description={`Exam Fee - ${formData.exam || "Selected Exam"}`}
                             onSuccess={handlePaymentSuccess}
                             onError={handlePaymentError}
                         />

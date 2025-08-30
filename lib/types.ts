@@ -9,3 +9,9 @@ export type BreadcrumbProps = {
     startLink: string;
     endLink: string;
 };
+
+export type ContactProps = {
+    mapLat: number;
+    mapLng: number;
+    address: string;
+};
