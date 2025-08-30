@@ -49,6 +49,7 @@ export function NotificationBell() {
           onMouseEnter={() => setIsShaking(true)}
           onMouseLeave={() => setIsShaking(false)}
           onAnimationEnd={() => setIsShaking(false)}
+          onClick={()=>console.log("Notification Bell Clicked")}
         >
           <Bell className="h-6 w-6" />
           {hasNewNotification && <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-600" />}

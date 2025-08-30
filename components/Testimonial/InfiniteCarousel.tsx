@@ -57,7 +57,7 @@ export function InfiniteCarousel() {
 
   return (
     <div
-      className="relative max-w-3xl mx-auto"
+      className="relative max-w-screen-xl mx-auto"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -69,8 +69,8 @@ export function InfiniteCarousel() {
           {testimonials.map((testimonial, index) => (
             <div key={index} className="w-full flex-shrink-0">
               <blockquote className="text-center m-10">
-                <p className="text-xl text-gray-600 mb-4">&ldquo;{testimonial.content}&rdquo;</p>
-                <footer className="text-gray-500">
+                <p className="text-xl text-white mb-4">&ldquo;{testimonial.content}&rdquo;</p>
+                <footer className="text-white">
                   - {testimonial.author}, {testimonial.title}
                 </footer>
               </blockquote>
