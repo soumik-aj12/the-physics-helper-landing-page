@@ -1,67 +1,63 @@
 "use client"
 
-import type React from "react"
 import { createContext, useContext, useEffect, useMemo, useState } from "react"
+import { auth } from "@/lib/firebase"
+import { onAuthStateChanged } from "firebase/auth"
+import { loginUser, registerUser, logoutUser } from "@/lib/auth"
 
 type User = {
+  uid: string
   name: string
   email: string
   classLevel?: "11" | "12"
-}
+} | null
 
 type AuthContextType = {
-  user: User | null
+  user: User
   isLoading: boolean
   login: (data: { email: string; password: string }) => Promise<void>
   signup: (data: { name: string; email: string; password: string; classLevel?: "11" | "12" }) => Promise<void>
-  logout: () => void
+  logout: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-const LS_KEY = "ph_user"
-
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null)
+  const [user, setUser] = useState<User>(null)
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(LS_KEY)
-      if (raw) {
-        const parsed = JSON.parse(raw) as User
-        setUser(parsed)
+    const unsub = onAuthStateChanged(auth, async (firebaseUser) => {
+      if (firebaseUser) {
+        const u: User = {
+          uid: firebaseUser.uid,
+          name: firebaseUser.displayName || firebaseUser.email?.split("@")[0] || "Student",
+          email: firebaseUser.email || "",
+        }
+        setUser(u)
+      } else {
+        setUser(null)
       }
-    } catch {
-      // ignore
-    } finally {
       setIsLoading(false)
-    }
+    })
+    return () => unsub()
   }, [])
 
-  const login = async ({ email }: { email: string; password: string }) => {
-    // Demo login: accept any email/password
-    const u: User = {
-      name: email.split("@")[0] || "Student",
-      email,
-    }
-    localStorage.setItem(LS_KEY, JSON.stringify(u))
-    setUser(u)
+  const login = async ({ email, password }: { email: string; password: string }) => {
+    await loginUser(email, password)
   }
 
   const signup = async ({
     name,
     email,
+    password,
     classLevel,
   }: { name: string; email: string; password: string; classLevel?: "11" | "12" }) => {
-    const u: User = { name: name || email.split("@")[0] || "Student", email, classLevel }
-    localStorage.setItem(LS_KEY, JSON.stringify(u))
-    setUser(u)
+    await registerUser(name, email, password, classLevel)
   }
 
-  const logout = () => {
-    localStorage.removeItem(LS_KEY)
-    setUser(null)
+  const logout = async () => {
+    await logoutUser()
   }
 
   const value = useMemo(() => ({ user, isLoading, login, signup, logout }), [user, isLoading])

@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useAuth } from "@/components/auth-context"
 import Wrapper from "@/components/Wrapper/Wrapper"
+import { registerUser } from "@/lib/auth"
 
 export default function AuthPage() {
     const router = useRouter()
@@ -18,7 +19,6 @@ export default function AuthPage() {
     const redirect = searchParams.get("redirect") || "/"
     const [mode, setMode] = useState<"login" | "signup">("login")
     const { user, login, signup, isLoading } = useAuth()
-
     useEffect(() => {
         if (!isLoading && user) {
             router.replace(redirect)
@@ -53,9 +53,9 @@ export default function AuthPage() {
                     </CardHeader>
                     <CardContent>
                         {mode === "login" ? (
-                            <LoginForm onLogin={login} redirect={redirect} />
+                            <LoginForm onLogin={login} />
                         ) : (
-                            <SignupForm onSignup={signup} redirect={redirect} />
+                            <SignupForm onSignup={signup} />
                         )}
                     </CardContent>
                 </Card>
@@ -65,119 +65,157 @@ export default function AuthPage() {
 }
 
 function LoginForm({
-    onLogin,
-    redirect,
+  onLogin,
 }: {
-    onLogin: (data: { email: string; password: string }) => Promise<void>
-    redirect: string
+  onLogin: (data: { email: string; password: string }) => Promise<void>
 }) {
-    const router = useRouter()
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-    const [loading, setLoading] = useState(false)
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
-        setLoading(true)
-        await onLogin({ email, password })
-        setLoading(false)
-        router.replace(redirect)
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
+    try {
+      await onLogin({ email, password })
+      // redirect handled by AuthPage effect once user is set
+    } catch (err: any) {
+      setError(
+        err.code === "auth/invalid-credential"
+          ? "Invalid email or password."
+          : err.message
+      )
+    } finally {
+      setLoading(false)
     }
-    return (
-        <form className="space-y-4" onSubmit={handleSubmit}>
-            <div>
-                <Label htmlFor="email">Email</Label>
-                <Input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    placeholder="you@example.com"
-                />
-            </div>
-            <div>
-                <Label htmlFor="password">Password</Label>
-                <Input
-                    id="password"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    placeholder="••••••••"
-                />
-            </div>
-            <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? "Signing in..." : "Sign in"}
-            </Button>
-        </form>
-    )
+  }
+
+  return (
+    <form className="space-y-4" onSubmit={handleSubmit}>
+      <div>
+        <Label htmlFor="email">Email</Label>
+        <Input
+          id="email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          placeholder="you@example.com"
+        />
+      </div>
+      <div>
+        <Label htmlFor="password">Password</Label>
+        <Input
+          id="password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          placeholder="••••••••"
+        />
+      </div>
+      {error && <p className="text-sm text-red-600">{error}</p>}
+      <Button type="submit" className="w-full" disabled={loading}>
+        {loading ? "Signing in..." : "Sign in"}
+      </Button>
+    </form>
+  )
 }
 
+
 function SignupForm({
-    onSignup,
-    redirect,
+  onSignup,
 }: {
-    onSignup: (data: { name: string; email: string; password: string; classLevel?: "11" | "12" }) => Promise<void>
-    redirect: string
+  onSignup: (data: { name: string; email: string; password: string; classLevel?: "11" | "12" }) => Promise<void>
 }) {
-    const router = useRouter()
-    const [name, setName] = useState("")
-    const [email, setEmail] = useState("")
-    const [classLevel, setClassLevel] = useState<"11" | "12" | undefined>(undefined)
-    const [password, setPassword] = useState("")
-    const [loading, setLoading] = useState(false)
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [classLevel, setClassLevel] = useState<"11" | "12" | undefined>(undefined)
+  const [password, setPassword] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
-        setLoading(true)
-        await onSignup({ name, email, password, classLevel })
-        setLoading(false)
-        router.replace(redirect)
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
+
+    try {
+      if (!classLevel) {
+        throw new Error("Please select your class level")
+      }
+      if (password.length < 6) {
+        throw new Error("Password must be at least 6 characters")
+      }
+
+      await onSignup({ name, email, password, classLevel })
+      // redirect handled by AuthPage effect once user is set
+    } catch (err: any) {
+      setError(
+        err.code === "auth/email-already-in-use"
+          ? "This email is already registered."
+          : err.message
+      )
+    } finally {
+      setLoading(false)
     }
+  }
 
-    return (
-        <form className="space-y-4" onSubmit={handleSubmit}>
-            <div>
-                <Label htmlFor="name">Full name</Label>
-                <Input id="name" value={name} onChange={(e) => setName(e.target.value)} required placeholder="Jane Doe" />
-            </div>
-            <div>
-                <Label htmlFor="email">Email</Label>
-                <Input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    placeholder="you@example.com"
-                />
-            </div>
-            <div>
-                <Label htmlFor="class">Class</Label>
-                <Select value={classLevel} onValueChange={(v) => setClassLevel(v as "11" | "12")}>
-                    <SelectTrigger>
-                        <SelectValue placeholder="Select Class 11 or 12" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="11">Class 11</SelectItem>
-                        <SelectItem value="12">Class 12</SelectItem>
-                    </SelectContent>
-                </Select>
-            </div>
-            <div>
-                <Label htmlFor="password">Password</Label>
-                <Input
-                    id="password"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    placeholder="Create a password"
-                />
-            </div>
-            <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? "Creating account..." : "Sign up"}
-            </Button>
-        </form>
-    )
+  return (
+    <form className="space-y-4" onSubmit={handleSubmit}>
+      <div>
+        <Label htmlFor="name">Full name</Label>
+        <Input
+          id="name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+          placeholder="Jane Doe"
+        />
+      </div>
+      <div>
+        <Label htmlFor="email">Email</Label>
+        <Input
+          id="email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          placeholder="you@example.com"
+        />
+      </div>
+      <div>
+        <Label htmlFor="class">Class</Label>
+        <Select
+          value={classLevel}
+          onValueChange={(v) => setClassLevel(v as "11" | "12")}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Select Class 11 or 12" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="11">Class 11</SelectItem>
+            <SelectItem value="12">Class 12</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+      <div>
+        <Label htmlFor="password">Password</Label>
+        <Input
+          id="password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          placeholder="Create a password"
+        />
+      </div>
+      {error && <p className="text-sm text-red-600">{error}</p>}
+      <Button type="submit" className="w-full" disabled={loading}>
+        {loading ? "Creating account..." : "Sign up"}
+      </Button>
+    </form>
+  )
 }

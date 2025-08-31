@@ -15,3 +15,10 @@ export type ContactProps = {
     mapLng: number;
     address: string;
 };
+
+export type RegisterProps = {
+    fullName: string;
+    email: string;
+    grade: number;
+    password: string;
+}
