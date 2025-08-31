@@ -11,7 +11,6 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useAuth } from "@/components/auth-context"
 import Wrapper from "@/components/Wrapper/Wrapper"
-import { registerUser } from "@/lib/auth"
 
 export default function AuthPage() {
     const router = useRouter()

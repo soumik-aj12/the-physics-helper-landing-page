@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge"
 import { Search, Download, Trophy } from "lucide-react"
 import Wrapper from "@/components/Wrapper/Wrapper"
 import { Breadcrumber } from "@/components/BreadCrumber"
+import { searchResultsProps } from "@/lib/types"
 
 const mockResults = [
     {
@@ -33,14 +34,14 @@ const mockResults = [
 
 export default function Results() {
     const [searchRoll, setSearchRoll] = useState("")
-    const [searchResult, setSearchResult] = useState<any>(null)
-    const [searched, setSearched] = useState(false)
+    const [searchResult, setSearchResult] = useState<searchResultsProps | undefined>(undefined)
 
-    const handleSearch = () => {
-        const result = mockResults.find((r) => r.rollNumber === searchRoll)
-        setSearchResult(result)
-        setSearched(true)
-    }
+const handleSearch = () => {
+    const result = mockResults.find((r) => r.rollNumber === searchRoll)
+    setSearchResult(result)
+    setSearched(true)
+}
+    const [searched, setSearched] = useState(false)
 
     return (
         <Wrapper>

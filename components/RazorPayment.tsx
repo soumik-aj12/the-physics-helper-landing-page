@@ -9,7 +9,7 @@ interface RazorpayPaymentProps {
   amount: number
   description: string
   onSuccess: (paymentId: string) => void
-  onError: (error: any) => void
+  onError: (error: string) => void
 }
 
 export function RazorpayPayment({ amount, description, onSuccess, onError }: RazorpayPaymentProps) {
@@ -27,9 +27,14 @@ export function RazorpayPayment({ amount, description, onSuccess, onError }: Raz
         setIsLoading(false)
       }, 2000)
     } catch (error) {
-      onError(error)
-      setIsLoading(false)
-    }
+  if (error instanceof Error) {
+    onError(error.message)
+  } else {
+    onError(String(error))
+  }
+  setIsLoading(false)
+}
+
   }
 
   return (

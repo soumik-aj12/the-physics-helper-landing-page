@@ -4,7 +4,7 @@ type DropdownItem = {
 };
 export type BreadcrumbProps = {
     start: string;
-    end: string ;
+    end: string;
     dropdownItems: DropdownItem[];
     startLink: string;
     endLink: string;
@@ -22,3 +22,13 @@ export type RegisterProps = {
     grade: number;
     password: string;
 }
+
+export type searchResultsProps = {
+    rollNumber: string;
+    name: string;
+    class: string;
+    exam: string;
+    marks: number | null;
+    grade: string;
+    status: string;
+    }
