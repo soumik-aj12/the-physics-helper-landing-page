@@ -1,20 +1,16 @@
 "use client"
 
-import About from "@/components/Announcements/About";
 import Features from "@/components/Features";
-import Footer from "@/components/Footer";
-import Header from "@/components/Header";
 import Testimonial from "@/components/Testimonial/Testimonial";
 import Wrapper from "@/components/Wrapper/Wrapper";
 import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
 import { HeroCarousel } from "@/components/HeroCarousel";
-import Programs from "@/components/Programs";
 import Link from "next/link";
 import { useAuth } from "@/components/auth-context";
 
 export default function Home() {
-  const { user, isLoading } = useAuth();
+  const { user } = useAuth();
   return (
     // <div className="flex flex-col min-h-screen">
     //   <Header />

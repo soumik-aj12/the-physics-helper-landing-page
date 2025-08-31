@@ -31,7 +31,7 @@ const mockResults = [
     },
 ]
 
-export default function page() {
+export default function Results() {
     const [searchRoll, setSearchRoll] = useState("")
     const [searchResult, setSearchResult] = useState<any>(null)
     const [searched, setSearched] = useState(false)

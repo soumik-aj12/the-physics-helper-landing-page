@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { AuthProvider } from "@/components/auth-context";
-
+import { Suspense } from "react";
+import {Ring2} from 'ldrs/react'
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -25,12 +26,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <AuthProvider>{children}</AuthProvider>
-        
+        <Suspense fallback={<Ring2
+          size="40"
+          stroke="5"
+          strokeLength="0.25"
+          bgOpacity="0.1"
+          speed="0.8"
+          color="black"
+        />}>
+          <AuthProvider>{children}</AuthProvider>
+        </Suspense>
+
       </body>
     </html>
   );

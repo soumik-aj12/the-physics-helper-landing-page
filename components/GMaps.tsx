@@ -1,5 +1,5 @@
 "use client"
-import { GoogleMap, LoadScript, Marker, useLoadScript } from "@react-google-maps/api";
+import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 import { Skeleton } from "./ui/skeleton";
 const GMaps = ({ mapLat, mapLng }:{mapLat:number,mapLng:number}) => {
   const { isLoaded, loadError } = useLoadScript({

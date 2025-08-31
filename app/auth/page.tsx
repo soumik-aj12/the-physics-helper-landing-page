@@ -81,11 +81,12 @@ function LoginForm({
     try {
       await onLogin({ email, password })
       // redirect handled by AuthPage effect once user is set
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const error = err as { code?: string; message?: string }
       setError(
-        err.code === "auth/invalid-credential"
+        error.code === "auth/invalid-credential"
           ? "Invalid email or password."
-          : err.message
+          : error.message || "An error occurred."
       )
     } finally {
       setLoading(false)
@@ -152,11 +153,12 @@ function SignupForm({
 
       await onSignup({ name, email, password, classLevel })
       // redirect handled by AuthPage effect once user is set
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const error = err as { code?: string; message?: string }
       setError(
-        err.code === "auth/email-already-in-use"
+        error.code === "auth/email-already-in-use"
           ? "This email is already registered."
-          : err.message
+          : error.message || "An error occurred."
       )
     } finally {
       setLoading(false)

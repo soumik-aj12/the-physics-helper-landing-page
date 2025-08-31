@@ -1,6 +1,5 @@
 import React from 'react'
 import Header from '../Header'
-import Footer from '../Footer'
 import { AuthProvider } from '@/components/auth-context'
 
 const Wrapper = ({children}: {children: React.ReactNode}) => {

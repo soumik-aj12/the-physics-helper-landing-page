@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/components/auth-context"
 import { Button } from "@/components/ui/button"
@@ -42,16 +42,17 @@ export default function ExamApplication() {
 
     const handleNext = () => setStep((s) => s + 1)
     const handlePaymentSuccess = (paymentId: string) => {
+        console.log("Payment successful with ID:", paymentId)
         setPaymentSuccess(true)
         setStep(3)
     }
-    const handlePaymentError = (error: any) => {
+    const handlePaymentError = (error: string) => {
         console.error("Payment failed:", error)
     }
 
-    useEffect(() => {
-        // No auto-redirect; show friendly gate below
-    }, [])
+    // useEffect(() => {
+    //     // No auto-redirect; show friendly gate below
+    // }, [])
 
     if (!isLoading && !user) {
         return (

@@ -20,7 +20,7 @@ const admissionFees = {
   "11": 15000,
   "12": 18000,
 }
-const page = () => {
+const Admission = () => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     name: "",
@@ -43,11 +43,12 @@ const page = () => {
   };
 
   const handlePaymentSuccess = (paymentId: string) => {
+    console.log("Payment successful with ID:", paymentId);
     setPaymentSuccess(true);
     setStep(3);
   };
 
-  const handlePaymentError = (error: any) => {
+  const handlePaymentError = (error: string) => {
     console.error("Payment failed:", error);
   };
   if (paymentSuccess) {
@@ -256,4 +257,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Admission;
