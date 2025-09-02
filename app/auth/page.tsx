@@ -1,96 +1,115 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useEffect, useState } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { useAuth } from "@/components/auth-context"
-import Wrapper from "@/components/Wrapper/Wrapper"
+import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useAuth } from "@/components/auth-context";
+import Wrapper from "@/components/Wrapper/Wrapper";
+import FullScreenLoader from "@/components/FullScreenLoader";
 
 export default function AuthPage() {
-    const router = useRouter()
-    const searchParams = useSearchParams()
-    const redirect = searchParams.get("redirect") || "/"
-    const [mode, setMode] = useState<"login" | "signup">("login")
-    const { user, login, signup, isLoading } = useAuth()
-    useEffect(() => {
-        if (!isLoading && user) {
-            router.replace(redirect)
-        }
-    }, [user, isLoading, router, redirect])
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect") || "/";
+  const [mode, setMode] = useState<"login" | "signup">("login");
+  const { user, login, signup, isLoading } = useAuth();
+  const [loading, setLoading] = useState<boolean>(false);
+  useEffect(() => {
+    setLoading(isLoading)
+    if (!isLoading && user) {
+      router.replace(redirect);
+    }
+  }, [user, isLoading, router, redirect]);
 
-    return (
-        <Wrapper>
-            <div className="container mx-auto px-4 max-w-md">
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="flex items-center justify-between">
-                            {mode === "login" ? "Login" : "Create an account"}
-                            <div className="text-sm">
-                                {mode === "login" ? (
-                                    <span>
-                                        New here?{" "}
-                                        <button className="text-blue-600 underline" onClick={() => setMode("signup")}>
-                                            Sign up
-                                        </button>
-                                    </span>
-                                ) : (
-                                    <span>
-                                        Already have an account?{" "}
-                                        <button className="text-blue-600 underline" onClick={() => setMode("login")}>
-                                            Log in
-                                        </button>
-                                    </span>
-                                )}
-                            </div>
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        {mode === "login" ? (
-                            <LoginForm onLogin={login} />
-                        ) : (
-                            <SignupForm onSignup={signup} />
-                        )}
-                    </CardContent>
-                </Card>
-            </div>
-        </Wrapper>
-    )
+  return (
+    <Wrapper>
+      <FullScreenLoader isLoading={loading} />
+      <div className="flex min-h-screen items-center justify-center px-4">
+        <Card className="max-w-md w-full">
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              {mode === "login" ? "Login" : "Create an account"}
+              <div className="text-sm">
+                {mode === "login" ? (
+                  <span>
+                    New here?{" "}
+                    <button
+                      className="text-blue-600 underline"
+                      onClick={() => setMode("signup")}
+                    >
+                      Sign up
+                    </button>
+                  </span>
+                ) : (
+                  <span>
+                    Already have an account?{" "}
+                    <button
+                      className="text-blue-600 underline"
+                      onClick={() => setMode("login")}
+                    >
+                      Log in
+                    </button>
+                  </span>
+                )}
+              </div>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {mode === "login" ? (
+              <LoginForm onLogin={login} loading={loading} setLoading={setLoading} />
+            ) : (
+              <SignupForm onSignup={signup} loading={loading} setLoading={setLoading} />
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </Wrapper>
+  );
 }
 
 function LoginForm({
+  loading,
+  setLoading,
   onLogin,
 }: {
-  onLogin: (data: { email: string; password: string }) => Promise<void>
+  loading: boolean;
+  setLoading: (loading: boolean) => void;
+  onLogin: (data: { email: string; password: string }) => Promise<void>;
 }) {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    setError(null)
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
     try {
-      await onLogin({ email, password })
+      await onLogin({ email, password });
       // redirect handled by AuthPage effect once user is set
     } catch (err: unknown) {
-      const error = err as { code?: string; message?: string }
+      const error = err as { code?: string; message?: string };
       setError(
         error.code === "auth/invalid-credential"
           ? "Invalid email or password."
           : error.message || "An error occurred."
-      )
+      );
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <form className="space-y-4" onSubmit={handleSubmit}>
@@ -121,48 +140,57 @@ function LoginForm({
         {loading ? "Signing in..." : "Sign in"}
       </Button>
     </form>
-  )
+  );
 }
 
-
 function SignupForm({
+  loading,
+  setLoading,
   onSignup,
 }: {
-  onSignup: (data: { name: string; email: string; password: string; classLevel?: "11" | "12" }) => Promise<void>
+  loading: boolean;
+  setLoading: (loading: boolean) => void;
+  onSignup: (data: {
+    name: string;
+    email: string;
+    password: string;
+    classLevel?: "11" | "12";
+  }) => Promise<void>;
 }) {
-  const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
-  const [classLevel, setClassLevel] = useState<"11" | "12" | undefined>(undefined)
-  const [password, setPassword] = useState("")
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [classLevel, setClassLevel] = useState<"11" | "12" | undefined>(
+    undefined
+  );
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    setError(null)
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
 
     try {
       if (!classLevel) {
-        throw new Error("Please select your class level")
+        throw new Error("Please select your class level");
       }
       if (password.length < 6) {
-        throw new Error("Password must be at least 6 characters")
+        throw new Error("Password must be at least 6 characters");
       }
 
-      await onSignup({ name, email, password, classLevel })
+      await onSignup({ name, email, password, classLevel });
       // redirect handled by AuthPage effect once user is set
     } catch (err: unknown) {
-      const error = err as { code?: string; message?: string }
+      const error = err as { code?: string; message?: string };
       setError(
         error.code === "auth/email-already-in-use"
           ? "This email is already registered."
           : error.message || "An error occurred."
-      )
+      );
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <form className="space-y-4" onSubmit={handleSubmit}>
@@ -218,5 +246,5 @@ function SignupForm({
         {loading ? "Creating account..." : "Sign up"}
       </Button>
     </form>
-  )
+  );
 }
