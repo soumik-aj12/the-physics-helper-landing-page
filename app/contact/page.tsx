@@ -22,8 +22,8 @@ const page = () => {
                                 <TabsTrigger value="behala">Behala</TabsTrigger>
                                 <TabsTrigger value="arambagh">Arambagh</TabsTrigger>
                             </TabsList>
-                            <TabsContent value="behala"><ContactComponent mapLat={behalaContact.mapLat} mapLng={behalaContact.mapLng} address={behalaContact.address} /></TabsContent>
-                            <TabsContent value="arambagh"><ContactComponent mapLat={arambaghContact.mapLat} mapLng={arambaghContact.mapLng} address={arambaghContact.address} /></TabsContent>
+                            <TabsContent value="behala"><ContactComponent data={behalaContact} /></TabsContent>
+                            <TabsContent value="arambagh"><ContactComponent data={arambaghContact} /></TabsContent>
                         </Tabs>
                     </div>
                 </section>

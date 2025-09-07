@@ -11,6 +11,8 @@ export type BreadcrumbProps = {
 };
 
 export type ContactProps = {
+    phone: string;
+    email: string;
     mapLat: number;
     mapLng: number;
     address: string;

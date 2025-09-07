@@ -12,17 +12,6 @@ import { useAuth } from "@/components/auth-context";
 export default function Home() {
   const { user } = useAuth();
   return (
-    // <div className="flex flex-col min-h-screen">
-    //   <Header />
-    //   <main className="flex-grow">
-    //     <Hero />
-    //     <Features/>
-    //     <About/>
-    //     <Testimonial/>
-    //     <Contact/>
-    //   </main>
-    //   <Footer/>
-    // </div>
     <Wrapper>
       <section className="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg">
         <div className="container mx-auto px-4 flex flex-col md:flex-row text-center items-center py-20">

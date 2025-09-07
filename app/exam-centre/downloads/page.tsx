@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge"
 import { Download, FileText, Key, BookOpen } from "lucide-react"
 import Wrapper from "@/components/Wrapper/Wrapper"
 import { Breadcrumber } from "@/components/BreadCrumber"
+import Downloads from "@/components/Downloads/Downloads"
 
 const downloadItems = [
     {
@@ -73,34 +74,7 @@ export default function page() {
                         dropdownItems={[{ label: "Apply for Exam", link: "apply" }, { label: "View Syllabus", link: "results" }, { label: "View Results", link: "results" }]}
                     />
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {downloadItems.map((item, index) => (
-                            <Card key={index}>
-                                <CardHeader>
-                                    <div className="flex items-start justify-between">
-                                        <div className="flex items-center">
-                                            <item.icon className="h-6 w-6 text-blue-600 mr-2" />
-                                            <div>
-                                                <CardTitle className="text-lg">{item.title}</CardTitle>
-                                                <p className="text-sm text-gray-600 mt-1">{item.description}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </CardHeader>
-                                <CardContent>
-                                    <div className="flex justify-between items-center mb-4">
-                                        <div className="flex space-x-2">
-                                            <Badge variant="outline">Class {item.class}</Badge>
-                                            <Badge variant="secondary">{item.type}</Badge>
-                                        </div>
-                                        <span className="text-xs text-gray-500">{item.date}</span>
-                                    </div>
-                                    <Button className="w-full">
-                                        <Download className="mr-2 h-4 w-4" />
-                                        Download
-                                    </Button>
-                                </CardContent>
-                            </Card>
-                        ))}
+                        <Downloads/>
                     </div>
                 </div>
             </section>
