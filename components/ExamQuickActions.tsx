@@ -23,8 +23,8 @@ export function ExamQuickActions() {
     )
   }
 
-  const loginRedirectApply = "/auth?redirect=/exam-centre/apply"
-  const loginRedirectDownloads = "/auth?redirect=/exam-centre/downloads"
+  const loginRedirectApply = "/login?redirect=/exam-centre/apply"
+  const loginRedirectDownloads = "/login?redirect=/exam-centre/downloads"
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-6">

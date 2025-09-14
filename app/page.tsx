@@ -24,7 +24,7 @@ export default function Home() {
                 – Arghya Sen.
               </p>
             </div>
-            <div className="flex flex-col justify-center lg:flex-row gap-3">
+            <div className="flex flex-col justify-center 2xl:flex-row gap-3">
               <Link href="/admission">
                 <Button
                   size="lg"
