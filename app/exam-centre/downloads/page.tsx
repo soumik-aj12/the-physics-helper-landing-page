@@ -22,9 +22,9 @@ export default function page() {
                     <Breadcrumber
                         start="Exam Centre"
                         end="Downloads"
-                        startLink="exam-centre"
+                        startLink="/exam-centre"
                         endLink="downloads"
-                        dropdownItems={[{ label: "Apply for Exam", link: "apply" }, { label: "View Syllabus", link: "results" }, { label: "View Results", link: "results" }]}
+                        dropdownItems={[{ label: "Apply for Exam", link: "apply" }, { label: "View Syllabus", link: "syllabus" }, { label: "View Results", link: "results" }]}
                     />
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <Downloads/>

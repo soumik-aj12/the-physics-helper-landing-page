@@ -1,235 +1,147 @@
 "use client"
-
-import { useMemo, useState } from "react"
-import { useRouter } from "next/navigation"
+import { useState, useMemo, useEffect } from "react"
 import { useAuth } from "@/components/auth-context"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { RazorpayPayment } from "@/components/RazorPayment"
-import { CheckCircle, LogIn } from "lucide-react"
-import Link from "next/link"
+import { load } from "@cashfreepayments/cashfree-js"
 import Wrapper from "@/components/Wrapper/Wrapper"
+import { getExams } from "@/lib/service"
+import { Breadcrumber } from "@/components/BreadCrumber"
 
 export default function ExamApplication() {
-    const { user, isLoading } = useAuth()
-    const router = useRouter()
-    //   const searchParams = useSearchParams()
-    const redirectSelf = useMemo(() => `/auth?redirect=${encodeURIComponent("/exam-centre/apply")}`, [])
+  const { user } = useAuth()
+  useMemo(() => `/auth?redirect=${encodeURIComponent("/exam-centre/apply")}`, [])
 
-    const [step, setStep] = useState(1)
-    const [formData, setFormData] = useState({
-        name: user?.name || "",
-        email: user?.email || "",
-        phone: "",
-        class: user?.classLevel || "",
-        exam: "",
-        rollNumber: "",
-    })
-    const [paymentSuccess, setPaymentSuccess] = useState(false)
+  const [step, setStep] = useState(1)
+  const [formData, setFormData] = useState({
+    name: user?.name || "",
+    email: user?.email || "",
+    phone: "",
+    class: user?.classLevel || "",
+    examId: "",
+    examName: ""
+  })
 
-    const examFees: Record<string, number> = {
-        "physics-midterm-11": 500,
-        "physics-final-12": 750,
-        "physics-olympiad": 1000,
+  const examFees = process.env.NEXT_PUBLIC_PAYMENT_AMOUNT;
+
+  const handleInputChange = (field: string, value: string) => setFormData(prev => ({ ...prev, [field]: value }))
+  const handleNext = () => setStep(2)
+
+  const handleCashfreePayment = async () => {
+    try {
+      const res = await fetch("/api/create-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          examId: formData.examId,
+          examName: formData.examName,
+          amount: examFees,
+          studentId: user!.uid,
+          studentName: formData.name,
+          studentEmail: formData.email,
+          classLevel: formData.class,
+          email: formData.email,
+          phone: formData.phone,
+          type: "exam"
+        }),
+      })
+      const data = await res.json()
+      if (!data.payment_session_id) throw new Error("No payment session returned")
+
+      const cashfree = await load({ mode: "sandbox" })
+      cashfree.checkout({
+        paymentSessionId: data.payment_session_id,
+        redirectTarget: "_self",
+      })
+    } catch (err) {
+      console.error(err)
+      alert("Payment initialization failed")
     }
-
-    const handleInputChange = (field: string, value: string) => {
-        setFormData((prev) => ({ ...prev, [field]: value }))
+  }
+  const [examData, setExamData] = useState<any>(null);
+  useEffect(() => {
+    const fetchExamData = async () => {
+      try {
+        const data = await getExams(null);
+        setExamData(data);
+      } catch (err) {
+        console.error(err);
+      }
     }
-
-    const handleNext = () => setStep((s) => s + 1)
-    const handlePaymentSuccess = (paymentId: string) => {
-        console.log("Payment successful with ID:", paymentId)
-        setPaymentSuccess(true)
-        setStep(3)
-    }
-    const handlePaymentError = (error: string) => {
-        console.error("Payment failed:", error)
-    }
-
-    // useEffect(() => {
-    //     // No auto-redirect; show friendly gate below
-    // }, [])
-
-    if (!isLoading && !user) {
-        return (
-            <Wrapper>
-                <div className="container mx-auto px-4 max-w-md">
-                    <Card>
-                        <CardHeader>
-                            <CardTitle className="flex items-center gap-2">
-                                <LogIn className="h-5 w-5" /> Login required
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                            <p className="text-gray-600">Please login or create an account to apply for exams.</p>
-                            <Link href={redirectSelf}>
-                                <Button className="w-full">Go to Login / Signup</Button>
-                            </Link>
-                            <Button variant="outline" className="w-full bg-transparent" onClick={() => router.push("/exam-centre")}>
-                                Back to Exam Centre
-                            </Button>
-                        </CardContent>
-                    </Card>
-                </div>
-            </Wrapper>
-        )
-    }
-
-    if (paymentSuccess) {
-        return (
-            <Wrapper>
-                <div className="container mx-auto px-4 max-w-2xl">
-                    <Card>
-                        <CardContent className="p-8 text-center">
-                            <CheckCircle className="h-16 w-16 text-green-600 mx-auto mb-4" />
-                            <h2 className="text-2xl font-bold mb-4">Application Successful!</h2>
-                            <p className="text-gray-600 mb-6">
-                                Your exam application has been submitted successfully. You will receive a confirmation email shortly.
-                            </p>
-                            <div className="bg-gray-50 p-4 rounded-lg mb-6">
-                                <p className="text-sm">
-                                    <strong>Application ID:</strong> APP{Math.random().toString(36).substr(2, 9).toUpperCase()}
-                                </p>
-                                <p className="text-sm">
-                                    <strong>Exam:</strong> {formData.exam}
-                                </p>
-                                <p className="text-sm">
-                                    <strong>Class:</strong> {formData.class}
-                                </p>
-                            </div>
-                            <Button onClick={() => router.push("/exam-centre")}>Back to Exam Centre</Button>
-                        </CardContent>
-                    </Card>
-                </div>
-            </Wrapper>
-        )
-    }
-
+    fetchExamData();
+  }, [])
+  if (step === 1) {
     return (
-        <Wrapper>
-            <div className="container mx-auto px-4 py-20 max-w-2xl">
-                <h1 className="text-3xl font-bold text-center mb-8">Exam Application</h1>
-
-                {step === 1 && (
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Student Information</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <form
-                                className="space-y-4"
-                                onSubmit={(e) => {
-                                    e.preventDefault()
-                                    handleNext()
-                                }}
-                            >
-                                <div>
-                                    <Label htmlFor="name">Full Name</Label>
-                                    <Input
-                                        id="name"
-                                        value={formData.name}
-                                        onChange={(e) => handleInputChange("name", e.target.value)}
-                                        placeholder="Enter your full name"
-                                    />
-                                </div>
-                                <div>
-                                    <Label htmlFor="email">Email Address</Label>
-                                    <Input
-                                        id="email"
-                                        type="email"
-                                        value={formData.email}
-                                        onChange={(e) => handleInputChange("email", e.target.value)}
-                                        placeholder="Enter your email"
-                                    />
-                                </div>
-                                <div>
-                                    <Label htmlFor="phone">Phone Number</Label>
-                                    <Input
-                                        id="phone"
-                                        value={formData.phone}
-                                        onChange={(e) => handleInputChange("phone", e.target.value)}
-                                        placeholder="Enter your phone number"
-                                    />
-                                </div>
-                                <div>
-                                    <Label htmlFor="class">Class</Label>
-                                    <Select value={formData.class} onValueChange={(value) => handleInputChange("class", value)}>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Select your class" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="11">Class 11</SelectItem>
-                                            <SelectItem value="12">Class 12</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                                <div>
-                                    <Label htmlFor="exam">Select Exam</Label>
-                                    <Select value={formData.exam} onValueChange={(value) => handleInputChange("exam", value)}>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Select exam" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="physics-midterm-11">Physics Mid-Term (Class 11)</SelectItem>
-                                            <SelectItem value="physics-final-12">Physics Final (Class 12)</SelectItem>
-                                            <SelectItem value="physics-olympiad">Physics Olympiad</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                                <div>
-                                    <Label htmlFor="rollNumber">Roll Number (if applicable)</Label>
-                                    <Input
-                                        id="rollNumber"
-                                        value={formData.rollNumber}
-                                        onChange={(e) => handleInputChange("rollNumber", e.target.value)}
-                                        placeholder="Enter your roll number"
-                                    />
-                                </div>
-                                <Button type="submit" className="w-full">
-                                    Proceed to Payment
-                                </Button>
-                            </form>
-                        </CardContent>
-                    </Card>
-                )}
-
-                {step === 2 && (
-                    <div className="space-y-6">
-                        <Card>
-                            <CardHeader>
-                                <CardTitle>Application Summary</CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <div className="space-y-2">
-                                    <div className="flex justify-between">
-                                        <span>Name:</span>
-                                        <span className="font-semibold">{formData.name}</span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <span>Class:</span>
-                                        <span className="font-semibold">{formData.class}</span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <span>Exam:</span>
-                                        <span className="font-semibold">{formData.exam}</span>
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
-
-                        <RazorpayPayment
-                            amount={(formData.exam && examFees[formData.exam]) || 500}
-                            description={`Exam Fee - ${formData.exam || "Selected Exam"}`}
-                            onSuccess={handlePaymentSuccess}
-                            onError={handlePaymentError}
-                        />
-                    </div>
-                )}
-            </div>
-        </Wrapper>
+      <Wrapper>
+        <div className="container mx-auto px-4 py-20 max-w-2xl">
+          <Breadcrumber
+            start="Exam Centre"
+            end="Apply for Exam"
+            startLink="/exam-centre"
+            endLink="/apply"
+            dropdownItems={[{ label: "View Results", link: "results" }, { label: "View Syllabus", link: "syllabus" }, { label: "Downloads", link: "downloads" }]}
+          />
+          <Card>
+            <CardHeader><CardTitle>Student Information</CardTitle></CardHeader>
+            <CardContent className="space-y-4">
+              <Label>Full Name</Label>
+              <Input value={formData.name} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange("name", e.target.value)} />
+              <Label>Email</Label>
+              <Input type="email" value={formData.email} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange("email", e.target.value)} />
+              <Label>Class</Label>
+              <Select value={formData.class} onValueChange={(v: string) => handleInputChange("class", v)}>
+                <SelectTrigger><SelectValue placeholder="Select class" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="11">Class 11</SelectItem>
+                  <SelectItem value="12">Class 12</SelectItem>
+                </SelectContent>
+              </Select>
+              <Label>Exam</Label>
+              <Select value={formData.examId} onValueChange={(v: string) => {
+                handleInputChange("examId", v);
+                handleInputChange("examName", examData?.find((exam: any) => exam.id === v)?.name || "");
+              }}>
+                <SelectTrigger><SelectValue placeholder="Select exam" /></SelectTrigger>
+                <SelectContent>
+                  {examData ? examData?.map((exam: any) => (
+                    <SelectItem key={exam.id} value={exam.id}>
+                      {exam.name}
+                    </SelectItem>
+                  )) : (
+                    <SelectItem value="loading">No exams available</SelectItem>
+                  )}
+                </SelectContent>
+              </Select>
+              <Button className="w-full mt-4" onClick={handleNext}>Proceed to Payment</Button>
+            </CardContent>
+          </Card>
+        </div>
+      </Wrapper>
     )
+  }
+
+  if (step === 2) {
+    return (
+      <Wrapper>
+        <div className="container mx-auto px-4 py-20 max-w-2xl">
+          <Card>
+            <CardHeader><CardTitle>Application Summary</CardTitle></CardHeader>
+            <CardContent>
+              <p>Name: {formData.name}</p>
+              <p>Class: {formData.class}</p>
+              <p>Exam: {formData.examName}</p>
+              <Button className="w-full mt-4" onClick={handleCashfreePayment}>
+                Pay ₹{examFees} & Apply
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </Wrapper>
+    )
+  }
+
+  return null
 }

@@ -1,17 +1,18 @@
 "use client";
 
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { auth } from "@/lib/firebase";
+import { auth, db } from "@/lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { loginUser, registerUser, logoutUser } from "@/lib/auth";
+import { doc, getDoc } from "firebase/firestore";
 
-type User = { uid: string; name: string; email: string; classLevel?: "11" | "12" } | null;
+type User = { uid: string; name: string; email: string; classLevel?: "11" | "12"; admissionStatus?: "Pending" | "Completed" | "" } | null;
 
 type AuthContextType = {
   user: User;
   isLoading: boolean;
   login: (data: { email: string; password: string }) => Promise<void>;
-  signup: (data: { name: string; email: string; password: string; classLevel?: "11" | "12" }) => Promise<void>;
+  signup: (data: { name: string; email: string; password: string; classLevel?: "11" | "12", phone: string }) => Promise<void>;
   logout: () => Promise<void>;
 };
 
@@ -24,12 +25,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser && firebaseUser.emailVerified) {
-        const u: User = {
-          uid: firebaseUser.uid,
-          name: firebaseUser.displayName || firebaseUser.email?.split("@")[0] || "Student",
-          email: firebaseUser.email || "",
-        };
-        setUser(u);
+        const userRef = doc(db, "users", firebaseUser.uid);
+        const userSnap = await getDoc(userRef);
+        if (userSnap.exists()) {
+          const userData = userSnap.data();
+          const u: User = {
+            uid: firebaseUser.uid,
+            name: firebaseUser.displayName || firebaseUser.email?.split("@")[0] || "Student",
+            email: firebaseUser.email || "",
+            admissionStatus: userData.admissionStatus || "Pending",
+            classLevel: userData.classLevel,
+          };
+          setUser(u);
+        }
+
       } else {
         setUser(null);
       }

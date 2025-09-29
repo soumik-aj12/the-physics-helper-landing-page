@@ -11,6 +11,8 @@ import { useAuth } from "@/components/auth-context";
 
 export default function Home() {
   const { user } = useAuth();
+  console.log(user);
+  
   return (
     <Wrapper>
       <section className="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg">
@@ -25,27 +27,29 @@ export default function Home() {
               </p>
             </div>
             <div className="flex flex-col justify-center 2xl:flex-row gap-3">
-              <Link href="/admission">
-                <Button
-                  size="lg"
-                  variant="secondary"
-                  className="w-full md:w-auto"
-                >
-                  <div className="text-base">Apply for admission</div>
-                  <ChevronRight className="ml-2 h-4 w-4" />
-                </Button>
-              </Link>
+              {user && user.admissionStatus !== "Completed" && (
+                <Link href="/admission">
+                  <Button
+                    size="lg"
+                    variant="secondary"
+                    className="w-full md:w-auto"
+                  >
+                    <div className="text-base">Apply for admission</div>
+                    <ChevronRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
+              )}
               {user && (
                 <Link href="/exam-centre/apply">
-                <Button
-                  size="lg"
-                  variant="secondary"
-                  className="w-full md:w-auto"
-                >
-                  <div className="text-base">Apply for exam</div>
-                  <ChevronRight className="ml-2 h-4 w-4" />
-                </Button>
-              </Link>
+                  <Button
+                    size="lg"
+                    variant="secondary"
+                    className="w-full md:w-auto"
+                  >
+                    <div className="text-base">Apply for exam</div>
+                    <ChevronRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
               )}
               <Link href="/contact">
                 <Button

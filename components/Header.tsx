@@ -48,7 +48,7 @@ const Header = () => {
             </Link>
           </nav>
 
-          <NotificationBell />
+          {/* <NotificationBell /> */}
 
           {/* Desktop Auth Button */}
           <div className="hidden md:block">

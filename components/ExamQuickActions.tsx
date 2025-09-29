@@ -61,14 +61,22 @@ export function ExamQuickActions() {
         </Card>
       </Link>
 
-      <Link href="/exam-centre/results" className="group">
+      {/* <Link href="/exam-centre/results" className="group">
         <Card className="flex items-center justify-centerhover:shadow-lg transition-shadow h-full">
           <CardContent className="w-full p-6 text-center">
             <Trophy className="h-12 w-12 text-yellow-600 mx-auto mb-4" />
             <h3 className="font-semibold group-hover:text-yellow-600">View Results</h3>
           </CardContent>
         </Card>
-      </Link>
+      </Link> */}
+      <div className="group opacity-50 pointer-events-none select-none" role="status" aria-label="View Results (disabled)" title="View Results (disabled)">
+        <Card className="flex items-center justify-center transition-shadow h-full">
+          <CardContent className="w-full p-6 text-center">
+            <Trophy className="h-12 w-12 text-yellow-600 mx-auto mb-4" />
+            <h3 className="font-semibold">View Results</h3>
+          </CardContent>
+        </Card>
+      </div>
 
       {user ? (
         <Link href="/exam-centre/downloads" className="group">

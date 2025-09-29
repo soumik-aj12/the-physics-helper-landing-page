@@ -22,7 +22,7 @@ export function Breadcrumber({ start, end, dropdownItems, startLink, endLink }: 
                 <BreadcrumbItem>
                     <DropdownMenu>
                         <DropdownMenuTrigger>
-                            <Link href={endLink}>{end}</Link>
+                            <div>{end}</div>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="start">
                             {dropdownItems.map((item, index) => (

@@ -59,9 +59,9 @@ const handleSearch = () => {
                     <Breadcrumber
                         start="Exam Centre"
                         end="Results"
-                        startLink="exam-centre"
+                        startLink="/exam-centre"
                         endLink="results"
-                        dropdownItems={[{ label: "Apply for Exam", link: "apply" }, { label: "View Syllabus", link: "results" }, { label: "Downloads", link: "downloads" }]}
+                        dropdownItems={[{ label: "Apply for Exam", link: "apply" }, { label: "View Syllabus", link: "syllabus" }, { label: "Downloads", link: "downloads" }]}
                     />
                     <Card>
                         <CardHeader>

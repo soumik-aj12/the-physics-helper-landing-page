@@ -14,6 +14,7 @@ export default function SignupForm() {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [phone, setPhone] = useState("")
   const [classLevel, setClassLevel] = useState<"11" | "12" | undefined>()
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
@@ -27,7 +28,7 @@ export default function SignupForm() {
       if (!classLevel) throw new Error("Please select your class level")
       if (password.length < 6) throw new Error("Password must be at least 6 characters")
 
-      await signup({ name, email, password, classLevel })
+      await signup({ name, email, password, classLevel, phone })
       router.replace("/login?msg=verify")
     } catch (err: any) {
       setError(err.code === "auth/email-already-in-use" ? "This email is already registered." : err.message || "Something went wrong.")
@@ -45,6 +46,10 @@ export default function SignupForm() {
       <div>
         <Label htmlFor="email">Email</Label>
         <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+      </div>
+      <div>
+        <Label htmlFor="phone">Phone</Label>
+        <Input id="phone" type="phone" value={phone} onChange={(e) => setPhone(e.target.value)} required />
       </div>
       <div>
         <Label htmlFor="class">Class</Label>
