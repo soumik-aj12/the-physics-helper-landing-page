@@ -12,10 +12,6 @@ import { CheckCircle, GraduationCap } from "lucide-react"
 import React, { useState } from "react"
 import { load } from "@cashfreepayments/cashfree-js"
 
-const admissionFees = {
-  "11": 15000,
-  "12": 18000,
-}
 
 export default function Admission() {
   const { user } = useAuth();
