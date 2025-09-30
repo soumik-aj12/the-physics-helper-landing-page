@@ -1,7 +1,6 @@
 "use client"
 
 import Features from "@/components/Features";
-import Testimonial from "@/components/Testimonial/Testimonial";
 import Wrapper from "@/components/Wrapper/Wrapper";
 import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";

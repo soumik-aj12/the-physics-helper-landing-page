@@ -21,7 +21,7 @@ export async function POST(req: Request) {
     const { name: studentName, email: studentEmail, phone: studentPhone } = studentDoc|| {};
     // log(studentName, studentEmail, studentPhone);
     // Verify with Cashfree
-    const res = await axios.get(`https://sandbox.cashfree.com/pg/orders/${orderId}`, {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_CASHFREE_URL}/${orderId}`, {
       headers: {
         "x-client-id": process.env.NEXT_PUBLIC_CASHFREE_APP_ID!,
         "x-client-secret": process.env.NEXT_PUBLIC_CASHFREE_SECRET_KEY!,

@@ -51,7 +51,7 @@ export default function ExamApplication() {
       const data = await res.json()
       if (!data.payment_session_id) throw new Error("No payment session returned")
 
-      const cashfree = await load({ mode: "sandbox" })
+      const cashfree = await load({ mode: process.env.NEXT_PUBLIC_CASHFREE_MODE! })
       cashfree.checkout({
         paymentSessionId: data.payment_session_id,
         redirectTarget: "_self",

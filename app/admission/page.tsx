@@ -57,7 +57,7 @@ export default function Admission() {
       })
       const data = await res.json()
       if (!data.payment_session_id) throw new Error("No payment session returned")
-      const cashfree = await load({ mode: "sandbox" })
+      const cashfree = await load({ mode: process.env.NEXT_PUBLIC_CASHFREE_MODE! }) // "TEST" | "PROD"
       cashfree.checkout({
         paymentSessionId: data.payment_session_id,
         redirectTarget: "_self",
