@@ -16,7 +16,6 @@ export async function POST(req: Request) {
   const getStudentDetails = await getStudentDetailsById(studentId);
   const {phone: studentPhone} = getStudentDetails || {};
   const token = generatePaymentToken({ orderId, type, studentId, examId, classLevel, examName, admissionData, amount })
-  log("Generated payment token:", token);
   const res = await axios.post(
     "https://sandbox.cashfree.com/pg/orders",
     {

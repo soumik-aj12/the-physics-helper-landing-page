@@ -51,8 +51,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await loginUser(email, password);
   };
 
-  const signup = async ({ name, email, password, classLevel }: { name: string; email: string; password: string; classLevel?: "11" | "12" }) => {
-    await registerUser(name, email, password, classLevel);
+  const signup = async ({ name, email, password, classLevel, phone }: { name: string; email: string; password: string; classLevel?: "11" | "12", phone: string }) => {
+    await registerUser(name, email, phone, password, classLevel);
   };
 
   const logout = async () => {

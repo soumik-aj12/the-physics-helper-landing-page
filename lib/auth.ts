@@ -11,8 +11,9 @@ import { doc, setDoc } from "firebase/firestore";
 export async function registerUser(
   name: string,
   email: string,
+  phone: string,
   password: string,
-  classLevel?: "11" | "12"
+  classLevel?: "11" | "12",
 ) {
   const cred = await createUserWithEmailAndPassword(auth, email, password);
 
@@ -24,6 +25,7 @@ export async function registerUser(
     classLevel,
     createdAt: new Date(),
     emailVerified: cred.user.emailVerified || false,
+    phone,
   });
 
   await sendEmailVerification(cred.user);
