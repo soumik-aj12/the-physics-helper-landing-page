@@ -4,7 +4,6 @@ import { adminDb, adminStorage } from "@/lib/firebaseAdmin"
 import { generateRollNumber, createAdmitCardPDF } from "@/lib/admitCardUtils"
 import { verifyPaymentToken } from "@/lib/jwt"
 import { checkExistingExamApplication, getStudentDetailsById } from "@/lib/adminService"
-import { log } from "console"
 
 export async function POST(req: Request) {
   try {
@@ -42,7 +41,10 @@ export async function POST(req: Request) {
 
       // Firestore doc ID unique per student & exam
       const docId = `${studentId}_${examId}`
-      const examRef = adminDb.collection("applications").doc(docId)
+      const applicationRef = adminDb.collection("applications").doc(docId)
+
+      const examRef = adminDb.collection("exams").doc(examId)
+      const examDoc = await examRef.get()
 
 
 
@@ -54,7 +56,7 @@ export async function POST(req: Request) {
         rollNumber,
         examName,
         classLevel,
-        date: new Date().toLocaleDateString(),
+        date: examDoc.exists ? (examDoc.data()?.date as string) : "TBD",
       });
       // console.log("Generated PDF size (bytes):", pdfBuffer.length);
 
@@ -73,7 +75,7 @@ export async function POST(req: Request) {
         `admit_cards/${classLevel}/${rollNumber}.pdf`
       )}?alt=media`
 
-      await examRef.set({
+      await applicationRef.set({
         examId,
         userId: studentId,
         paymentId: orderId,

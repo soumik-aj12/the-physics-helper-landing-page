@@ -24,8 +24,8 @@ export async function POST(req: Request) {
       order_id: orderId,
       customer_details: {
         customer_id: studentId,
-        customer_email: admissionData?.email || studentEmail,
-        customer_phone: admissionData?.phone || studentPhone,
+        customer_email: studentEmail,
+        customer_phone: studentPhone,
       },
       order_meta: {
         return_url: `${process.env.NEXT_PUBLIC_BASE_URL}/payment-status?token=${token}`,

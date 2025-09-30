@@ -30,7 +30,7 @@ const UpcomingExams = () => {
             const res = await getExams(user?.classLevel!);
             const res2 = await checkExistingExamApplication(user?.uid!);
             setHasApplied(res2);
-            console.log("Upcoming exams fetched:", res); 
+            // console.log("Upcoming exams fetched:", res); 
             setUpcomingExams(res.map((exam: any) => 
                 ({ 
                     id: exam.id, 

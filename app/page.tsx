@@ -11,7 +11,6 @@ import { useAuth } from "@/components/auth-context";
 
 export default function Home() {
   const { user } = useAuth();
-  console.log(user);
   
   return (
     <Wrapper>
@@ -68,7 +67,7 @@ export default function Home() {
           </div>
         </div>
         <Features />
-        <Testimonial />
+        {/* <Testimonial /> */}
       </section>
     </Wrapper>
   );

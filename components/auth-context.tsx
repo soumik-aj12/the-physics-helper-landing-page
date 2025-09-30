@@ -6,7 +6,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { loginUser, registerUser, logoutUser } from "@/lib/auth";
 import { doc, getDoc } from "firebase/firestore";
 
-type User = { uid: string; name: string; email: string; classLevel?: "11" | "12"; admissionStatus?: "Pending" | "Completed" | "" } | null;
+type User = { uid: string; name: string; email: string; classLevel?: "11" | "12"; admissionStatus?: "Pending" | "Completed" | "", phone: string } | null;
 
 type AuthContextType = {
   user: User;
@@ -35,6 +35,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             email: firebaseUser.email || "",
             admissionStatus: userData.admissionStatus || "Pending",
             classLevel: userData.classLevel,
+            phone: userData.phone || "",
           };
           setUser(u);
         }

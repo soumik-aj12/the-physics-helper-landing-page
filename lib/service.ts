@@ -2,7 +2,7 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
 export const getExams = async (classLevel: string | null) => {
-    console.log("classLevel in getExams:", classLevel);
+    // console.log("classLevel in getExams:", classLevel);
     
     const examsRef = collection(db, "exams");
     var querySnapshot;

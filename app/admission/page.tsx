@@ -15,12 +15,13 @@ import { load } from "@cashfreepayments/cashfree-js"
 
 export default function Admission() {
   const { user } = useAuth();
+
   const [step, setStep] = useState(1)
   const [formData, setFormData] = useState({
     name: user?.name || "",
     email: user?.email || "",
-    phone: "",
-    class: "",
+    phone: user?.phone || "",
+    class: user?.classLevel || "",
     previousSchool: "",
     address: "",
     parentName: "",
@@ -38,13 +39,19 @@ export default function Admission() {
   const startPayment = async () => {
     try {
       // 1️⃣ Create order
+      const finalData = {
+        previousSchool: formData.previousSchool,
+        address: formData.address,
+        parentName: formData.parentName,
+        parentPhone: formData.parentPhone,
+      }
       const res = await fetch("/api/create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           type: "admission",
           studentId: user?.uid,
-          admissionData: formData,
+          admissionData: finalData,
           amount: process.env.NEXT_PUBLIC_ADMISSION_FEES!,
         }),
       })
@@ -68,7 +75,7 @@ export default function Admission() {
             <CardContent className="p-8 text-center">
               <CheckCircle className="h-16 w-16 text-green-600 mx-auto mb-4" />
               <h2 className="text-2xl font-bold mb-4">Admission Application Successful!</h2>
-              <p className="text-gray-600 mb-6">Our admissions team will contact you shortly.</p>
+              {/* <p className="text-gray-600 mb-6">Our admissions team will contact you shortly.</p> */}
               <div className="bg-gray-50 p-4 rounded-lg mb-6">
                 <p className="text-sm">
                   <strong>Class:</strong> {formData.class}
@@ -116,7 +123,7 @@ export default function Admission() {
                 >
                   <div>
                     <Label htmlFor="name">Student Full Name</Label>
-                    <Input id="name" value={formData.name} onChange={(e) => handleInputChange("name", e.target.value)} />
+                    <Input id="name" value={formData.name} disabled={true} />
                   </div>
                   <div>
                     <Label htmlFor="email">Email Address</Label>
@@ -124,11 +131,11 @@ export default function Admission() {
                   </div>
                   <div>
                     <Label htmlFor="phone">Student Phone Number</Label>
-                    <Input id="phone" value={formData.phone} onChange={(e) => handleInputChange("phone", e.target.value)} />
+                    <Input id="phone" value={formData.phone} onChange={(e) => handleInputChange("phone", e.target.value)} disabled={!!user?.phone}/>
                   </div>
                   <div>
                     <Label htmlFor="class">Applying for Class</Label>
-                    <Select onValueChange={(value) => handleInputChange("class", value)}>
+                    <Select value={formData.class} onValueChange={(value) => handleInputChange("class", value)} disabled={!!user?.classLevel}>
                       <SelectTrigger>
                         <SelectValue placeholder="Select class" />
                       </SelectTrigger>
