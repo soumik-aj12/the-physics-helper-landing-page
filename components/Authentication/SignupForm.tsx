@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useAuth } from "@/components/auth-context"
+import { toast } from "sonner"
 
 export default function SignupForm() {
   const router = useRouter()
@@ -29,7 +30,7 @@ export default function SignupForm() {
       if (password.length < 6) throw new Error("Password must be at least 6 characters")
 
       await signup({ name, email, password, classLevel, phone })
-      router.replace("/login?msg=verify")
+      toast.success("Account created! Please verify your email before logging in.")
     } catch (err: any) {
       setError(err.code === "auth/email-already-in-use" ? "This email is already registered." : err.message || "Something went wrong.")
     } finally {

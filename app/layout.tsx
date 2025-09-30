@@ -4,6 +4,7 @@ import "./globals.css";
 import { AuthProvider } from "@/components/auth-context";
 import { Suspense } from "react";
 import {Ring2} from 'ldrs/react'
+import { Toaster } from "@/components/ui/sonner";
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -39,7 +40,10 @@ export default function RootLayout({
           speed="0.8"
           color="black"
         />}>
-          <AuthProvider>{children}</AuthProvider>
+          <AuthProvider>
+            {children}
+            <Toaster/>
+          </AuthProvider>
         </Suspense>
 
       </body>
