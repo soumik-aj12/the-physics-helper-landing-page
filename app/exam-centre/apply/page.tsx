@@ -136,6 +136,7 @@ export default function ExamApplication() {
               <Button className="w-full mt-4" onClick={handleCashfreePayment}>
                 Pay ₹{examFees} & Apply
               </Button>
+              <p className="text-sm text-center text-gray-600">Please be patient while processing payment. Do not refresh or close the window</p>
             </CardContent>
           </Card>
         </div>

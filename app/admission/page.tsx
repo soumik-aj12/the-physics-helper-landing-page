@@ -17,12 +17,13 @@ export default function Admission() {
   const { user } = useAuth();
 
   const [step, setStep] = useState(1)
+  const [error, setError] = useState<string | null>(null)
   const [formData, setFormData] = useState({
     name: user?.name || "",
     email: user?.email || "",
     phone: user?.phone || "",
     class: user?.classLevel || "",
-    previousSchool: "",
+    school: "",
     address: "",
     parentName: "",
     parentPhone: "",
@@ -33,14 +34,20 @@ export default function Admission() {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
 
-  const handleNext = () => setStep(step + 1)
+  const handleNext = () => {
+    if (!formData.school || !formData.address || !formData.parentName || !formData.parentPhone) {
+      setError("Please fill all the fields");
+      return;
+    }
+    setStep(step + 1);
+  }
 
   // 🔑 Trigger Cashfree Payment
   const startPayment = async () => {
-    try {
+    try { 
       // 1️⃣ Create order
       const finalData = {
-        previousSchool: formData.previousSchool,
+        school: formData.school,
         address: formData.address,
         parentName: formData.parentName,
         parentPhone: formData.parentPhone,
@@ -146,8 +153,8 @@ export default function Admission() {
                     </Select>
                   </div>
                   <div>
-                    <Label htmlFor="previousSchool">Previous School</Label>
-                    <Input id="previousSchool" value={formData.previousSchool} onChange={(e) => handleInputChange("previousSchool", e.target.value)} />
+                    <Label htmlFor="school">School</Label>
+                    <Input id="school" value={formData.school} onChange={(e) => handleInputChange("school", e.target.value)} />
                   </div>
                   <div>
                     <Label htmlFor="address">Address</Label>
@@ -159,12 +166,13 @@ export default function Admission() {
                   </div>
                   <div>
                     <Label htmlFor="parentPhone">Parent/Guardian Phone</Label>
-                    <Input id="parentPhone" value={formData.parentPhone} onChange={(e) => handleInputChange("parentPhone", e.target.value)} />
+                    <Input id="parentPhone" type="tel" value={formData.parentPhone} onChange={(e) => handleInputChange("parentPhone", e.target.value)} />
                   </div>
                   <Button type="submit" className="w-full">
                     Proceed to Payment
                   </Button>
                 </form>
+                {error && <p className="text-sm text-red-600 text-center mt-2">{error}</p>}
               </CardContent>
             </Card>
           )}
@@ -196,6 +204,10 @@ export default function Admission() {
               <Button onClick={startPayment} className="w-full">
                 Pay Admission Fee
               </Button>
+              <Button variant="ghost" onClick={() => setStep(1)} className="w-full">
+                Back
+              </Button>
+              <p className="text-sm text-center text-gray-600">Please be patient while processing payment. Do not refresh or close the window</p>
             </div>
           )}
         </div>
