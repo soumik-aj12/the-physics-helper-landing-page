@@ -6,11 +6,12 @@ export function generateRollNumber(examId: string): string {
 }
 
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
-export async function createAdmitCardPDF({ studentName, studentEmail, rollNumber, examName, classLevel, studentPhone, date }: {
+export async function createAdmitCardPDF({ studentName, studentEmail, rollNumber, examName, classLevel, examLocation, studentPhone, date }: {
   studentName: string
   studentEmail: string
   rollNumber: string
   examName: string
+  examLocation: string
   classLevel: string
   studentPhone: string
   date: string
@@ -112,21 +113,20 @@ export async function createAdmitCardPDF({ studentName, studentEmail, rollNumber
   //   yPosition -= lineHeight;
   // }
 
-  // Date of Birth
-  // page.drawText('Date of Birth:', {
-  //   x: leftMargin,
-  //   y: yPosition,
-  //   size: 12,
-  //   font: helveticaBold,
-  //   color: rgb(0, 0, 0),
-  // });
-  // page.drawText(studentData.dob, {
-  //   x: leftMargin + 120,
-  //   y: yPosition,
-  //   size: 12,
-  //   font: helvetica,
-  //   color: rgb(0, 0, 0),
-  // });
+  page.drawText('Exam Centre:', {
+    x: leftMargin,
+    y: yPosition,
+    size: 12,
+    font: helveticaBold,
+    color: rgb(0, 0, 0),
+  });
+  page.drawText(examLocation, {
+    x: leftMargin + 120,
+    y: yPosition,
+    size: 12,
+    font: helvetica,
+    color: rgb(0, 0, 0),
+  });
 
   yPosition -= lineHeight;
 

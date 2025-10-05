@@ -11,7 +11,7 @@ export async function POST(req: Request) {
     if (!token) return NextResponse.json({ status: "FAILED", error: "Missing token" }, { status: 400 })
 
       const payload: any = verifyPaymentToken(token)
-      const { orderId, type, studentId, examId, examName, classLevel, admissionData, amount } = payload
+      const { orderId, type, studentId, examId, examName, examLocation, classLevel, admissionData, amount } = payload
       
     const checkApplication = await checkExistingExamApplication(studentId);
     if (type === "exam" && checkApplication) {
@@ -46,7 +46,7 @@ export async function POST(req: Request) {
       const examRef = adminDb.collection("exams").doc(examId)
       const examDoc = await examRef.get()
 
-
+      var location = examLocation === "behala"? "Behala" : "Arambagh(Khanakul)";
 
       // Create PDF
       const pdfBuffer = await createAdmitCardPDF({
@@ -56,6 +56,7 @@ export async function POST(req: Request) {
         rollNumber,
         examName,
         classLevel,
+        examLocation: location,
         date: examDoc.exists ? (examDoc.data()?.date as string) : "TBD",
       });
       // console.log("Generated PDF size (bytes):", pdfBuffer.length);

@@ -1,21 +1,25 @@
 import { NextResponse } from "next/server"
 import axios from "axios"
 import { generatePaymentToken } from "@/lib/jwt"
-import { log } from "console"
 import { getStudentDetailsById } from "@/lib/adminService"
 
 export async function POST(req: Request) {
-  const { type, studentId, examName, examId, studentEmail, classLevel, admissionData, amount } = await req.json()
+  const { type, studentId, examName, examId, studentEmail, classLevel, examLocation, admissionData, amount } = await req.json()
 
   // log("Creating order for:", { type, studentId, examName, examId, studentName, studentEmail, classLevel, admissionData, amount  });
   if (!type || !studentId || !amount) {
     return NextResponse.json({ error: "Missing required parameters" }, { status: 400 })
   }
-
+  var token = null;
   const orderId = `${type}_${Date.now()}`
   const getStudentDetails = await getStudentDetailsById(studentId);
   const {phone: studentPhone} = getStudentDetails || {};
-  const token = generatePaymentToken({ orderId, type, studentId, examId, classLevel, examName, admissionData, amount })
+  if(type === "exam"){
+      token = generatePaymentToken({ orderId, type, studentId, examId, classLevel, examLocation, examName, amount })
+  }else{
+      token = generatePaymentToken({ orderId, type, studentId, admissionData, amount })
+  }
+  
   const res = await axios.post(
     process.env.NEXT_PUBLIC_CASHFREE_URL!,
     {

@@ -6,13 +6,13 @@ import { onAuthStateChanged } from "firebase/auth";
 import { loginUser, registerUser, logoutUser } from "@/lib/auth";
 import { doc, getDoc } from "firebase/firestore";
 
-type User = { uid: string; name: string; email: string; classLevel?: "11" | "12"; admissionStatus?: "Pending" | "Completed" | "", phone: string } | null;
+type User = { uid: string; name: string; email: string; classLevel?: "11" | "12" | "10"; admissionStatus?: "Pending" | "Completed" | "", phone: string } | null;
 
 type AuthContextType = {
   user: User;
   isLoading: boolean;
   login: (data: { email: string; password: string }) => Promise<void>;
-  signup: (data: { name: string; email: string; password: string; classLevel?: "11" | "12", phone: string }) => Promise<void>;
+  signup: (data: { name: string; email: string; password: string; classLevel?: "11" | "12" | "10", phone: string }) => Promise<void>;
   logout: () => Promise<void>;
 };
 
@@ -52,7 +52,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await loginUser(email, password);
   };
 
-  const signup = async ({ name, email, password, classLevel, phone }: { name: string; email: string; password: string; classLevel?: "11" | "12", phone: string }) => {
+  const signup = async ({ name, email, password, classLevel, phone }: { name: string; email: string; password: string; classLevel?: "11" | "12" | "10", phone: string }) => {
     await registerUser(name, email, phone, password, classLevel);
   };
 

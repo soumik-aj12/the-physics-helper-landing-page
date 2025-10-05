@@ -18,10 +18,10 @@ export default function Home() {
           <div className="md:w-1/2 mb-8 md:mb-0">
             <div>
               <h1 className="text-4xl md:text-5xl font-bold mb-4">
-                Mechanics is the heart of Physics
+                “Time and space are not absolute — they are relative and connected in spacetime.”
               </h1>
               <p className="w-5/6 text-end text-xl md:text-lg mb-6">
-                – Arghya Sen.
+                – Albert Einstein.
               </p>
             </div>
             <div className="flex flex-col justify-center 2xl:flex-row gap-3">
@@ -55,7 +55,7 @@ export default function Home() {
                   variant="secondary"
                   className="w-full md:w-auto"
                 >
-                  <div className="text-base">Contact me</div>
+                  <div className="text-base">Contact us</div>
                   <ChevronRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>

@@ -13,7 +13,7 @@ export async function registerUser(
   email: string,
   phone: string,
   password: string,
-  classLevel?: "11" | "12",
+  classLevel?: "11" | "12" | "10",
 ) {
   const cred = await createUserWithEmailAndPassword(auth, email, password);
 

@@ -16,7 +16,7 @@ type DocumentData = {
   id: string
   title: string
   subject: string
-  classLevel?: "11" | "12"
+  classLevel?: "11" | "12" | "10"
   fileType: string
   downloadURL: string
   createdAt?: any

@@ -20,7 +20,7 @@ const page = () => {
                         <Tabs defaultValue="behala">
                             <TabsList>
                                 <TabsTrigger value="behala">Behala</TabsTrigger>
-                                <TabsTrigger value="arambagh">Arambagh</TabsTrigger>
+                                <TabsTrigger value="arambagh">Arambagh(Khanakul)</TabsTrigger>
                             </TabsList>
                             <TabsContent value="behala"><ContactComponent data={behalaContact} /></TabsContent>
                             <TabsContent value="arambagh"><ContactComponent data={arambaghContact} /></TabsContent>

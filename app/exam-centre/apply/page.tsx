@@ -22,7 +22,8 @@ export default function ExamApplication() {
     phone: "",
     class: user?.classLevel || "",
     examId: "",
-    examName: ""
+    examName: "",
+    examLocation: ""
   })
 
   const examFees = process.env.NEXT_PUBLIC_PAYMENT_AMOUNT;
@@ -66,13 +67,18 @@ export default function ExamApplication() {
     const fetchExamData = async () => {
       try {
         const data = await getExams(null);
-        setExamData(data);
+        console.log(data);
+
+        setExamData(data.filter((exam: any) => exam.classLevel === formData.class));
       } catch (err) {
         console.error(err);
       }
     }
     fetchExamData();
   }, [])
+  if(!user){
+    return <div>Please log in to apply for an exam.</div>
+  }
   if (step === 1) {
     return (
       <Wrapper>
@@ -92,11 +98,22 @@ export default function ExamApplication() {
               <Label>Email</Label>
               <Input type="email" value={formData.email} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange("email", e.target.value)} />
               <Label>Class</Label>
-              <Select value={formData.class} onValueChange={(v: string) => handleInputChange("class", v)}>
-                <SelectTrigger><SelectValue placeholder="Select class" /></SelectTrigger>
+              <Select value={formData.class} onValueChange={(value) => handleInputChange("class", value)} disabled={!!user?.classLevel}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select class" />
+                </SelectTrigger>
                 <SelectContent>
+                  <SelectItem value="10">Class 10</SelectItem>
                   <SelectItem value="11">Class 11</SelectItem>
                   <SelectItem value="12">Class 12</SelectItem>
+                </SelectContent>
+              </Select>
+              <Label>Exam Location</Label>
+              <Select value={formData.examLocation} onValueChange={(v: string) => handleInputChange("examLocation", v)}>
+                <SelectTrigger><SelectValue placeholder="Select exam location" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="behala">Behala</SelectItem>
+                  <SelectItem value="arambagh">Arambagh(Khanakul)</SelectItem>
                 </SelectContent>
               </Select>
               <Label>Exam</Label>
@@ -133,6 +150,7 @@ export default function ExamApplication() {
               <p>Name: {formData.name}</p>
               <p>Class: {formData.class}</p>
               <p>Exam: {formData.examName}</p>
+              <p>Exam Location: {formData.examLocation === "behala" ? "Behala" : formData.examLocation === "arambagh" ? "Arambagh(Khanakul)" : ""}</p>
               <Button className="w-full mt-4" onClick={handleCashfreePayment}>
                 Pay ₹{examFees} & Apply
               </Button>

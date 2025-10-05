@@ -14,7 +14,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/components/auth-context";
 import { useRouter } from "next/navigation";
-
+import Image from "next/image";
+import logo from "../assets/tphLogo.jpg";
 const Header = () => {
   const { user, logout } = useAuth();
   const router = useRouter();
@@ -24,7 +25,7 @@ const Header = () => {
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         {/* Logo */}
         <Link href="/" className="flex items-center space-x-2">
-          <Atom className="h-8 w-8 text-blue-600" />
+          <Image src={logo} alt="Logo" width={40} height={40} />
           <span className="text-2xl font-bold text-gray-800">
             The Physics Helper
           </span>

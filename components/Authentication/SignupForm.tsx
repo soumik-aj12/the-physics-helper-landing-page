@@ -16,7 +16,7 @@ export default function SignupForm() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [phone, setPhone] = useState("")
-  const [classLevel, setClassLevel] = useState<"11" | "12" | undefined>()
+  const [classLevel, setClassLevel] = useState<"11" | "12" | "10" | undefined>()
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
@@ -54,11 +54,12 @@ export default function SignupForm() {
       </div>
       <div>
         <Label htmlFor="class">Class</Label>
-        <Select value={classLevel} onValueChange={(v) => setClassLevel(v as "11" | "12")}>
+        <Select value={classLevel} onValueChange={(v) => setClassLevel(v as "11" | "12" | "10")} required>
           <SelectTrigger>
             <SelectValue placeholder="Select Class" />
           </SelectTrigger>
           <SelectContent>
+            <SelectItem value="10">Class 10</SelectItem>
             <SelectItem value="11">Class 11</SelectItem>
             <SelectItem value="12">Class 12</SelectItem>
           </SelectContent>

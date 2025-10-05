@@ -10,6 +10,6 @@ export const arambaghContact = {
     phone: "+91 86970 69659",
     email: "arghyasen@thephysicshelper.com",
     address: "PVPC+5GM Khanakul, Senpur, Khanakul, West Bengal, 712406",
-    mapLat: 22.73551394847094,
-    mapLng: 87.87129336418765
+    mapLat: 22.734774,
+    mapLng: 87.871842
 }
