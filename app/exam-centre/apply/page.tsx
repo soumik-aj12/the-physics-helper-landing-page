@@ -10,6 +10,7 @@ import { load } from "@cashfreepayments/cashfree-js"
 import Wrapper from "@/components/Wrapper/Wrapper"
 import { getExams } from "@/lib/service"
 import { Breadcrumber } from "@/components/BreadCrumber"
+import Link from "next/link"
 
 export default function ExamApplication() {
   const { user } = useAuth()
@@ -77,7 +78,11 @@ export default function ExamApplication() {
     fetchExamData();
   }, [])
   if(!user){
-    return <div>Please log in to apply for an exam.</div>
+    return <Wrapper>
+      <div className="container mx-auto px-4 py-20 max-w-2xl text-center">
+        <p className="mb-4">You need to be logged in to apply for an exam.</p>
+      </div>
+    </Wrapper>
   }
   if (step === 1) {
     return (
