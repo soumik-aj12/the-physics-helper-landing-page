@@ -46,7 +46,14 @@ export async function POST(req: Request) {
       const examRef = adminDb.collection("exams").doc(examId)
       const examDoc = await examRef.get()
 
-      var location = examLocation === "behala"? "Behala" : "Arambagh(Khanakul)";
+      var location = "";
+      if(examLocation === "behala"){
+        location = "Behala(Kolkata)"
+      }else if(examLocation === "sekendarpur"){
+        location = "Sekendarpur High School"
+      }else if(examLocation === "gopalnagar"){
+        location = "K. K. Jnanada Institution(Gopalnagar)"
+      }
 
       // Create PDF
       const pdfBuffer = await createAdmitCardPDF({

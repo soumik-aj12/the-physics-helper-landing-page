@@ -117,8 +117,9 @@ export default function ExamApplication() {
               <Select value={formData.examLocation} onValueChange={(v: string) => handleInputChange("examLocation", v)}>
                 <SelectTrigger><SelectValue placeholder="Select exam location" /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="behala">Behala</SelectItem>
-                  <SelectItem value="arambagh">Arambagh(Khanakul)</SelectItem>
+                  <SelectItem value="behala">Behala(Kolkata)</SelectItem>
+                  <SelectItem value="sekendarpur">Sekendarpur High School</SelectItem>
+                  <SelectItem value="gopalnagar">K. K. Jnanada Institution(Gopalnagar)</SelectItem>
                 </SelectContent>
               </Select>
               <Label>Exam</Label>
