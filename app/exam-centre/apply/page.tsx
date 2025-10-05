@@ -67,7 +67,7 @@ export default function ExamApplication() {
     const fetchExamData = async () => {
       try {
         const data = await getExams(null);
-        console.log(data);
+        // console.log(data);
 
         setExamData(data.filter((exam: any) => exam.classLevel === formData.class));
       } catch (err) {
