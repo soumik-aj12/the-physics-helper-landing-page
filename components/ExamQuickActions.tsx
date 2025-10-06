@@ -52,11 +52,11 @@ export function ExamQuickActions() {
         </Card>
       )}
 
-      <Link href="/exam-centre/syllabus" className="group">
+      <Link href="/exam-centre/routine" className="group">
         <Card className="flex items-center justify-centerhover:shadow-lg transition-shadow h-full">
           <CardContent className="w-full p-6 text-center">
             <FileText className="h-12 w-12 text-green-600 mx-auto mb-4" />
-            <h3 className="font-semibold group-hover:text-green-600">View Syllabus</h3>
+            <h3 className="font-semibold group-hover:text-green-600">View Routines</h3>
           </CardContent>
         </Card>
       </Link>

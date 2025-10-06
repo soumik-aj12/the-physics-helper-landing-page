@@ -61,7 +61,7 @@ const handleSearch = () => {
                         end="Results"
                         startLink="/exam-centre"
                         endLink="results"
-                        dropdownItems={[{ label: "Apply for Exam", link: "apply" }, { label: "View Syllabus", link: "syllabus" }, { label: "Downloads", link: "downloads" }]}
+                        dropdownItems={[{ label: "Apply for Exam", link: "apply" }, { label: "View Routines", link: "Routine" }, { label: "Downloads", link: "downloads" }]}
                     />
                     <Card>
                         <CardHeader>

@@ -93,7 +93,7 @@ export default function ExamApplication() {
             end="Apply for Exam"
             startLink="/exam-centre"
             endLink="/apply"
-            dropdownItems={[{ label: "View Results", link: "results" }, { label: "View Syllabus", link: "syllabus" }, { label: "Downloads", link: "downloads" }]}
+            dropdownItems={[{ label: "View Results", link: "results" }, { label: "View Routines", link: "routine" }, { label: "Downloads", link: "downloads" }]}
           />
           <Card>
             <CardHeader><CardTitle>Student Information</CardTitle></CardHeader>

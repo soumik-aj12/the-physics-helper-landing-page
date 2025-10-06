@@ -23,6 +23,7 @@ export default function Admission() {
     email: user?.email || "",
     phone: user?.phone || "",
     class: user?.classLevel || "",
+    admissionLocation: "",
     school: "",
     address: "",
     parentName: "",
@@ -51,6 +52,7 @@ export default function Admission() {
         address: formData.address,
         parentName: formData.parentName,
         parentPhone: formData.parentPhone,
+        admissionLocation: formData.admissionLocation,
       }
       const res = await fetch("/api/create-order", {
         method: "POST",
@@ -104,7 +106,7 @@ export default function Admission() {
       <section className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-20">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">Admission</h1>
-          <p className="text-xl max-w-3xl mx-auto">Apply for admission to Class 11 or 12 at The Physics Helper.</p>
+          <p className="text-xl max-w-3xl mx-auto">Apply for admission to Class 10, 11 or 12 at The Physics Helper.</p>
         </div>
       </section>
 
@@ -147,8 +149,21 @@ export default function Admission() {
                         <SelectValue placeholder="Select class" />
                       </SelectTrigger>
                       <SelectContent>
+                        <SelectItem value="10">Class 10</SelectItem>
                         <SelectItem value="11">Class 11</SelectItem>
                         <SelectItem value="12">Class 12</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label htmlFor="location">Admission Location</Label>
+                    <Select value={formData.admissionLocation} onValueChange={(value) => handleInputChange("admissionLocation", value)}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select location" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="behala">Behala (Kolkata) Centre</SelectItem>
+                        <SelectItem value="khanakul">Khanakul (Arambagh) Centre</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -192,6 +207,10 @@ export default function Admission() {
                     <div className="flex justify-between">
                       <span>Applying for:</span>
                       <span className="font-semibold">Class {formData.class}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Admission Location:</span>
+                      <span className="font-semibold">{formData.admissionLocation}</span>
                     </div>
                     <div className="flex justify-between">
                       <span>Parent/Guardian:</span>
