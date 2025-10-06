@@ -139,7 +139,7 @@ export default function Admission() {
                     <Input id="email" type="email" value={user?.email} disabled />
                   </div>
                   <div>
-                    <Label htmlFor="phone">Student Phone Number</Label>
+                    <Label htmlFor="phone">Student Mobile Number</Label>
                     <Input id="phone" value={formData.phone} onChange={(e) => handleInputChange("phone", e.target.value)} disabled={!!user?.phone}/>
                   </div>
                   <div>
@@ -180,7 +180,7 @@ export default function Admission() {
                     <Input id="parentName" value={formData.parentName} onChange={(e) => handleInputChange("parentName", e.target.value)} />
                   </div>
                   <div>
-                    <Label htmlFor="parentPhone">Parent/Guardian Phone</Label>
+                    <Label htmlFor="parentPhone">Parent/Guardian Mobile Number</Label>
                     <Input id="parentPhone" type="tel" value={formData.parentPhone} onChange={(e) => handleInputChange("parentPhone", e.target.value)} />
                   </div>
                   <Button type="submit" className="w-full">
