@@ -32,7 +32,8 @@ export default function Downloads() {
 
     const q = query(
       collection(db, "documents"),
-      where("classLevel", "==", user.classLevel),
+      where("classLevel", "in", [user.classLevel,"All"]),
+      
       orderBy("createdAt", "desc")
     )
 
@@ -103,7 +104,7 @@ export default function Downloads() {
           <CardContent>
             <div className="flex justify-between items-center mb-4">
               <div className="flex space-x-2">
-                <Badge variant="outline">Class {item.classLevel || "All"}</Badge>
+                <Badge variant="outline">{item.classLevel || "All"}</Badge>
                 <Badge variant="secondary">
                   {item.fileType === "ak" ? "Answer Key" : "Sample Paper"}
                 </Badge>
