@@ -33,7 +33,7 @@ export function ExamQuickActions() {
           <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-6 text-center">
               <Calendar className="h-12 w-12 text-blue-600 mx-auto mb-4" />
-              <h3 className="font-semibold group-hover:text-blue-600">Apply for Exam</h3>
+              <h3 className="font-semibold group-hover:text-blue-600">Apply for exam (21st Dec)</h3>
             </CardContent>
           </Card>
         </Link>

@@ -44,7 +44,7 @@ export default function Home() {
                       variant="secondary"
                       className="w-full md:w-auto"
                     >
-                      <div className="text-base">Apply for exam</div>
+                      <div className="text-base">Apply for exam (21st Dec)</div>
                       <ChevronRight className="ml-2 h-4 w-4" />
                     </Button>
                   </Link>
