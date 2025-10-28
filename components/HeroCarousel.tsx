@@ -13,6 +13,7 @@ import image8 from "../assets/8.jpg";
 import image9 from "../assets/9.jpg";
 import image10 from "../assets/10.jpg";
 import image11 from "../assets/11.jpg";
+import image12 from "../assets/12.jpg";
 const images = [
   image1,
   image2,
@@ -25,6 +26,7 @@ const images = [
   image9,
   image10,
   image11,
+  image12,
 ]
 
 export function HeroCarousel() {
