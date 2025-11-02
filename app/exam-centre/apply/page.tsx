@@ -45,7 +45,7 @@ export default function ExamApplication() {
           studentName: formData.name,
           studentEmail: formData.email,
           classLevel: formData.class,
-          email: formData.email,
+          examLocation: formData.examLocation,
           phone: formData.phone,
           type: "exam"
         }),
