@@ -4,10 +4,10 @@ import { generatePaymentToken } from "@/lib/jwt"
 import { getStudentDetailsById } from "@/lib/adminService"
 
 export async function POST(req: Request) {
-  const { type, studentId, examName, examId, studentEmail, classLevel, examLocation, admissionData, amount } = await req.json()
+  const { type, studentId, examName, examId, studentEmail, classLevel, examLocation, admissionData } = await req.json()
 
   // log("Creating order for:", { type, studentId, examName, examId, studentName, studentEmail, classLevel, admissionData, amount  });
-  if (!type || !studentId || !amount) {
+  if (!type || !studentId) {
     return NextResponse.json({ error: "Missing required parameters" }, { status: 400 })
   }
   var token = null;
@@ -19,11 +19,13 @@ export async function POST(req: Request) {
   }else{
       token = generatePaymentToken({ orderId, type, studentId, admissionData })
   }
+  const amount = type === "exam" ? process.env.NEXT_PUBLIC_EXAM_FEES! : process.env.NEXT_PUBLIC_ADMISSION_FEES!;
+  console.log("Amount: ",amount);
   
   const res = await axios.post(
     process.env.NEXT_PUBLIC_CASHFREE_URL!,
     {
-      order_amount: type === "exam" ? parseFloat(process.env.NEXT_PUBLIC_EXAM_FEES!) : parseFloat(process.env.NEXT_PUBLIC_ADMISSION_FEES!),
+      order_amount: amount,
       order_currency: "INR",
       order_id: orderId,
       customer_details: {

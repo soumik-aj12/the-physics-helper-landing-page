@@ -27,7 +27,7 @@ export default function ExamApplication() {
     examLocation: ""
   })
 
-  const examFees = process.env.NEXT_PUBLIC_PAYMENT_AMOUNT;
+  const examFees = process.env.NEXT_PUBLIC_EXAM_FEES;
 
   const handleInputChange = (field: string, value: string) => setFormData(prev => ({ ...prev, [field]: value }))
   const handleNext = () => setStep(2)
