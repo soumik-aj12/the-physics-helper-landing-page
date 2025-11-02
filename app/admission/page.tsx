@@ -23,9 +23,9 @@ export default function Admission() {
     email: user?.email || "",
     phone: user?.phone || "",
     class: user?.classLevel || "",
+    classType: user?.classType || "",
     admissionLocation: "",
     school: "",
-    address: "",
     parentName: "",
     parentPhone: "",
   })
@@ -36,7 +36,7 @@ export default function Admission() {
   }
 
   const handleNext = () => {
-    if (!formData.school || !formData.address || !formData.parentName || !formData.parentPhone) {
+    if (!formData.school || !formData.parentName || !formData.parentPhone) {
       setError("Please fill all the fields");
       return;
     }
@@ -49,10 +49,10 @@ export default function Admission() {
       // 1️⃣ Create order
       const finalData = {
         school: formData.school,
-        address: formData.address,
         parentName: formData.parentName,
         parentPhone: formData.parentPhone,
         admissionLocation: formData.admissionLocation,
+        classType: formData.classType
       }
       const res = await fetch("/api/create-order", {
         method: "POST",
@@ -156,6 +156,19 @@ export default function Admission() {
                     </Select>
                   </div>
                   <div>
+                    <Label htmlFor="class">Classtype</Label>
+                    <Select value={formData.classType} onValueChange={(value) => handleInputChange("classType", value)} disabled={!!user?.classType}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select class" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="JEE">JEE</SelectItem>
+                        <SelectItem value="NEET">NEET</SelectItem>
+                        <SelectItem value="Both">Both</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
                     <Label htmlFor="location">Admission Location</Label>
                     <Select value={formData.admissionLocation} onValueChange={(value) => handleInputChange("admissionLocation", value)}>
                       <SelectTrigger>
@@ -170,10 +183,6 @@ export default function Admission() {
                   <div>
                     <Label htmlFor="school">School</Label>
                     <Input id="school" value={formData.school} onChange={(e) => handleInputChange("school", e.target.value)} />
-                  </div>
-                  <div>
-                    <Label htmlFor="address">Address</Label>
-                    <Textarea id="address" value={formData.address} onChange={(e) => handleInputChange("address", e.target.value)} rows={3} />
                   </div>
                   <div>
                     <Label htmlFor="parentName">Parent/Guardian Name</Label>
@@ -207,6 +216,10 @@ export default function Admission() {
                     <div className="flex justify-between">
                       <span>Applying for:</span>
                       <span className="font-semibold">Class {formData.class}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Class Type:</span>
+                      <span className="font-semibold">{formData.classType === "Both" ? formData.classType + " (JEE+NEET)" : formData.classType}</span>
                     </div>
                     <div className="flex justify-between">
                       <span>Admission Location:</span>

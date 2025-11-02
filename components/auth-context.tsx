@@ -6,7 +6,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { loginUser, registerUser, logoutUser } from "@/lib/auth";
 import { doc, getDoc } from "firebase/firestore";
 
-type User = { uid: string; name: string; email: string; classLevel?: "11" | "12" | "10"; admissionStatus?: "Pending" | "Completed" | "", phone: string } | null;
+type User = { uid: string; name: string; email: string; classLevel?: "11" | "12" | "10"; classType?: "JEE" | "NEET" | "Both"; admissionStatus?: "Pending" | "Completed" | "", phone: string } | null;
 
 type AuthContextType = {
   user: User;

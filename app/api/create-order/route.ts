@@ -15,15 +15,15 @@ export async function POST(req: Request) {
   const getStudentDetails = await getStudentDetailsById(studentId);
   const {phone: studentPhone} = getStudentDetails || {};
   if(type === "exam"){
-      token = generatePaymentToken({ orderId, type, studentId, examId, classLevel, examLocation, examName, amount })
+      token = generatePaymentToken({ orderId, type, studentId, examId, classLevel, examLocation, examName })
   }else{
-      token = generatePaymentToken({ orderId, type, studentId, admissionData, amount })
+      token = generatePaymentToken({ orderId, type, studentId, admissionData })
   }
   
   const res = await axios.post(
     process.env.NEXT_PUBLIC_CASHFREE_URL!,
     {
-      order_amount: amount,
+      order_amount: type === "exam" ? parseFloat(process.env.NEXT_PUBLIC_EXAM_FEES!) : parseFloat(process.env.NEXT_PUBLIC_ADMISSION_FEES!),
       order_currency: "INR",
       order_id: orderId,
       customer_details: {

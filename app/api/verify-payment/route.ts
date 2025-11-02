@@ -10,17 +10,17 @@ export async function POST(req: Request) {
     const { token } = await req.json()
     if (!token) return NextResponse.json({ status: "FAILED", error: "Missing token" }, { status: 400 })
 
-      const payload: any = verifyPaymentToken(token)
-      const { orderId, type, studentId, examId, examName, examLocation, classLevel, admissionData, amount } = payload
-      
+    const payload: any = verifyPaymentToken(token)
+    const { orderId, type, studentId, examId, examName, examLocation, classLevel, admissionData } = payload;
+
     const checkApplication = await checkExistingExamApplication(studentId);
     if (type === "exam" && checkApplication) {
       return NextResponse.json({ status: "FAILED", error: "Exam application already exists" })
     }
     const studentDoc = await getStudentDetailsById(studentId);
-    const { name: studentName, email: studentEmail, phone: studentPhone } = studentDoc|| {};
-    // log(studentName, studentEmail, studentPhone);
-    // Verify with Cashfree
+    const { name: studentName, email: studentEmail, phone: studentPhone } = studentDoc || {};
+    const amount = type === "exam" ? parseFloat(process.env.NEXT_PUBLIC_EXAM_FEES!) : parseFloat(process.env.NEXT_PUBLIC_ADMISSION_FEES!);
+
     const res = await axios.get(`${process.env.NEXT_PUBLIC_CASHFREE_URL}/${orderId}`, {
       headers: {
         "x-client-id": process.env.NEXT_PUBLIC_CASHFREE_APP_ID!,
@@ -47,11 +47,11 @@ export async function POST(req: Request) {
       const examDoc = await examRef.get()
 
       var location = "";
-      if(examLocation === "behala"){
+      if (examLocation === "behala") {
         location = "Behala(Kolkata)"
-      }else if(examLocation === "sekendarpur"){
+      } else if (examLocation === "sekendarpur") {
         location = "Sekendarpur High School"
-      }else if(examLocation === "gopalnagar"){
+      } else if (examLocation === "gopalnagar") {
         location = "K. K. Jnanada Institution(Gopalnagar)"
       }
 
